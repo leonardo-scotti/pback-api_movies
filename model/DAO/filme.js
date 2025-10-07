@@ -20,6 +20,12 @@
  * Instalação do Prisma:
 *       npm install prisma         --save   -> Realiza a conexão com o DB
  *      npm install @prisma/client --save   -> Permite executar scripts SQL no DB
+ *      npx prisma init            --save   -> Inicializador do prisma no projeto (.env , prisma)
+ *      npx prisma migrate dev     --save   -> Permite sincronizar o Prisma com o DB, Modelar o
+ *                                              DB conforme as configurações do ORM.
+ *                                              CUIDADO: Esse comando faz um reset no DB.
+ *      npx prisma migrate reset   --save   -> Realiza o reset do DB.
+ *      npx prisma generate        --save   -> Realiza apenas o sincronismo com o DB
  * 
  *  ========================================================================================
  *  $queryRawUnsafe()   -> Permite executar apenas scripts SQL que retornam dados do DB
@@ -39,7 +45,8 @@
  ******************************************************************************************/
 
 //Import da biblioteca do @prisma/client
-const { PrismaClient } = require('@prisma/client');
+//const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('../../generated/prisma');
 
 //Cria um objeto do @prisma/client para manipular os scripts SQL
 const prisma = new PrismaClient();
