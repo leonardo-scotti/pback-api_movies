@@ -17,6 +17,7 @@
  *      Mongoose    -> É uma biblioteca para acesso a DB não relacional (MongoDB);
  * 
  * 
+ * 
  * Instalação do Prisma:
 *       npm install prisma         --save   -> Realiza a conexão com o DB
  *      npm install @prisma/client --save   -> Permite executar scripts SQL no DB
@@ -60,16 +61,11 @@ const getSelectAllFilms = async () => {
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
 
-        if (result.length > 0) {
+        if (result.length > 0)
             return result;
-        } else {
+         else 
             return false;
-            //{
-            //     "status": false,
-            //     "statuscode": 200,
-            //     "developer": "Leonardo Scotti"
-            // };
-        };
+
     } catch (error) {
         console.log(error);
         return false;
