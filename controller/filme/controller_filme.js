@@ -25,8 +25,11 @@ const listarFilmes = async () => {
 
         if (result) {
             if (result.length > 0) {
+                let amount = result.length;
+
                 MESSAGE.HEADER.status = MESSAGE.REQUEST_SUCESS.status;
                 MESSAGE.HEADER.status_code = MESSAGE.REQUEST_SUCESS.status_code;
+                MESSAGE.HEADER.response.movies_amount = amount;
                 MESSAGE.HEADER.response.movies = result;
 
                 return MESSAGE.HEADER; //200
