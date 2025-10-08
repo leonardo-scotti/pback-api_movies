@@ -35,13 +35,23 @@ app.use((request, response, next) => {
 //EndPoint que retorna a lista de filmes
 app.get('/v1/locadora/filme', cors(), async (request, response) => {
     let filmes = await controllerFilme.listarFilmes();
-    
+
     response.status(filmes.status_code);
     response.json(filmes);
-})
+});
+
+//EndPoint que retorna um filme filtrando pelo ID
+app.get('/v1/locadora/filme/:id', cors(), async (request, response) => {
+    let id = request.params.id;
+
+    let filme = await controllerFilme.buscarFilmeId(id);
+
+    response.status(filme.status_code);
+    response.json(filme);
+});
 
 // ====================================
 
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')
-})
+});

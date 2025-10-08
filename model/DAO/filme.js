@@ -19,7 +19,7 @@
  * 
  * 
  * Instalação do Prisma:
-*       npm install prisma         --save   -> Realiza a conexão com o DB
+ *       npm install prisma         --save   -> Realiza a conexão com o DB
  *      npm install @prisma/client --save   -> Permite executar scripts SQL no DB
  *      npx prisma init            --save   -> Inicializador do prisma no projeto (.env , prisma)
  *      npx prisma migrate dev     --save   -> Permite sincronizar o Prisma com o DB, Modelar o
@@ -46,7 +46,7 @@
  ******************************************************************************************/
 
 //Import da biblioteca do @prisma/client
-//const { PrismaClient } = require('@prisma/client');
+//*ANTIGO* const { PrismaClient } = require('@prisma/client');
 const { PrismaClient } = require('../../generated/prisma');
 
 //Cria um objeto do @prisma/client para manipular os scripts SQL
@@ -61,20 +61,37 @@ const getSelectAllFilms = async () => {
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
 
-        if (result.length > 0)
+        //Validação para identificar se o retorno do DB é um ARRAY (vazio ou com dados)
+        if (Array.isArray(result))
             return result;
-         else 
+        else
             return false;
 
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         return false;
     }
 };
 
 //Retorna um filme filtrando pelo ID do DB
 const getSelectByIdFilms = async (id) => {
+    try {
+        //Script SQL
+        let sql = `select * from tbl_filme where id = ${id}`;
 
+        //Executa no DB o script SQL
+        let result = await prisma.$queryRawUnsafe(sql);
+
+        //Validação para identificar se o retorno do DB é um ARRAY (vazio ou com dados)
+        if (Array.isArray(result))
+            return result;
+        else
+            return false;
+
+    } catch (error) {
+        //console.log(error);
+        return false;
+    }
 };
 
 //Insere um filme no DB
@@ -93,5 +110,6 @@ const setDeleteFilms = async (id) => {
 };
 
 module.exports = {
-    getSelectAllFilms
+    getSelectAllFilms,
+    getSelectByIdFilms
 }
