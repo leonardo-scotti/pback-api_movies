@@ -48,7 +48,7 @@ const buscarFilmeId = async (id) => {
 
     try {
         //Validação de campo obrigatório
-        if (id != '' || id != null || id != undefined || !isNaN(id) || id > 0) {
+        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
             //Preserva o argumento e o transforma em inteiro
             let idInt = parseInt(id);
 

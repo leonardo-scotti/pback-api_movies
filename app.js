@@ -11,7 +11,6 @@ const cors       = require('cors');
 const bodyParser = require('body-parser');
 
 // ========== IMPORT'S CONTROLLER'S ==========
-
 //Controller Filme
 const controllerFilme = require('./controller/filme/controller_filme.js')
 
@@ -31,7 +30,6 @@ app.use((request, response, next) => {
 })
 
 // ========== ENDPOINTS CRUD ==========
-
 //EndPoint que retorna a lista de filmes
 app.get('/v1/locadora/filme', cors(), async (request, response) => {
     let filmes = await controllerFilme.listarFilmes();
