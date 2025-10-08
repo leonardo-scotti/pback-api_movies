@@ -30,3 +30,13 @@ values ("O Aprendiz de Feiticeiro",
     "https://www.imdb.com/pt/video/vi780142105/?playlistId=tt0963966&ref_=tt_ov_ov_vi",
     "https://www.imdb.com/pt/title/tt0963966/mediaviewer/rm147224832/?ref_=tt_ov_i"
 );
+
+insert into tbl_filme(nome, sinopse, data_lancamento, duracao, orcamento, trailer, capa)
+values ("Hotel Costiera",
+    "Daniel De Luca é um ex-marinheiro meio italiano que retorna à Itália, terra de sua infância, e começa a resolver problemas em um dos hotéis mais luxuosos do mundo, localizado na espetacular costa de Positano.",
+    "2025-09-24",
+    "01:49:00",
+    150000000.00,
+    "https://www.imdb.com/pt/video/vi1780795417/?playlistId=tt13924416&ref_=tt_ov_pr_ov_vi",
+    "https://www.imdb.com/pt/title/tt13924416/mediaviewer/rm2396239618/?ref_=tt_ov_i"
+);
