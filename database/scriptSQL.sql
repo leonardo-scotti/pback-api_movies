@@ -1,5 +1,7 @@
 CREATE DATABASE db_locadora_filme_ds2t_25_2;
 
+USE db_locadora_filme_ds2t_25_2;
+
 CREATE TABLE tbl_filme(
 	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	nome VARCHAR(100) NOT NULL,

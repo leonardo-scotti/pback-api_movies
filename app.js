@@ -16,8 +16,13 @@ const controllerFilme = require('./controller/filme/controller_filme.js')
 
 // ===========================================
 
+//Cria um objeto especialista no formato JSON para receber os dados no body (POST e PUT)
+const bodyParserJSON = bodyParser.json();
+
+//Porta
 const PORT = process.PORT || 8080;
 
+//Cria o objeto APP para criar a API
 const app = express();
 
 //cors
@@ -48,6 +53,17 @@ app.get('/v1/locadora/filme/:id', cors(), async (request, response) => {
     response.json(filme);
 });
 
+//EndPoint que insere um filme no DB
+app.post('/v1/locadora/filme', cors(), bodyParserJSON, async (request, response) => {
+    let filmeBody = request.body;
+
+    let contentType = request.headers['content-type'];
+
+    let setFilme = await controllerFilme.inserirFilme(filmeBody, contentType);
+
+    response.status(setFilme.status_code);
+    response.json(setFilme);
+})
 // ====================================
 
 app.listen(PORT, () => {
