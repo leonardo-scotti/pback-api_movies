@@ -13,8 +13,8 @@ CREATE TABLE tbl_filme(
 	capa VARCHAR(200) NOT NULL
 );
 
-insert into tbl_filme(nome, sinopse, data_lancamento, duracao, orcamento, trailer, capa)
-values ("Jogo Sujo",
+INSERT INTO tbl_filme(nome, sinopse, data_lancamento, duracao, orcamento, trailer, capa)
+VALUES ("Jogo Sujo",
     "Segue Parker, um artesão e ladrão profissional que aborda seu trabalho com uma ética de trabalho direta e sem bobagens.",
     "2025-10-01",
     "02:05:00",
@@ -23,8 +23,8 @@ values ("Jogo Sujo",
     "https://www.imdb.com/pt/title/tt18392014/mediaviewer/rm3543377922/?ref_=tt_ov_i"
 );
 
-insert into tbl_filme(nome, sinopse, data_lancamento, duracao, orcamento, trailer, capa)
-values ("O Aprendiz de Feiticeiro",
+INSERT INTO tbl_filme(nome, sinopse, data_lancamento, duracao, orcamento, trailer, capa)
+VALUES ("O Aprendiz de Feiticeiro",
     "O mestre feiticeiro Balthazar Blake deve encontrar e treinar o descendente de Merlin para derrotar Morgana la Fée, a feiticeira das trevas.",
     "2010-08-13",
     "01:49:00",
@@ -33,8 +33,8 @@ values ("O Aprendiz de Feiticeiro",
     "https://www.imdb.com/pt/title/tt0963966/mediaviewer/rm147224832/?ref_=tt_ov_i"
 );
 
-insert into tbl_filme(nome, sinopse, data_lancamento, duracao, orcamento, trailer, capa)
-values ("Hotel Costiera",
+INSERT INTO tbl_filme(nome, sinopse, data_lancamento, duracao, orcamento, trailer, capa)
+VALUES ("Hotel Costiera",
     "Daniel De Luca é um ex-marinheiro meio italiano que retorna à Itália, terra de sua infância, e começa a resolver problemas em um dos hotéis mais luxuosos do mundo, localizado na espetacular costa de Positano.",
     "2025-09-24",
     "01:49:00",
@@ -42,3 +42,13 @@ values ("Hotel Costiera",
     "https://www.imdb.com/pt/video/vi1780795417/?playlistId=tt13924416&ref_=tt_ov_pr_ov_vi",
     "https://www.imdb.com/pt/title/tt13924416/mediaviewer/rm2396239618/?ref_=tt_ov_i"
 );
+
+UPDATE tbl_filme SET
+    nome                =   'nome',
+    sinopse             =   'sinopse',
+    data_lancamento     =   'data_lancamento',
+    duracao             =   'duracao', 
+    orcamento           =   'orcamento',
+    trailer             =   'trailer',
+    capa                =   'capa'
+WHERE id = id

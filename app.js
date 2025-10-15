@@ -64,6 +64,27 @@ app.post('/v1/locadora/filme', cors(), bodyParserJSON, async (request, response)
     response.status(setFilme.status_code);
     response.json(setFilme);
 })
+
+//EndPoint que atualiza um filme no DB
+app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async (request, response) => {
+    let idFilme     = request.params.id;
+    let filmeBody   = request.body;
+    let contentType = request.headers['content-type'];
+
+    updatedFilme = await controllerFilme.atualizarFilme(filmeBody, idFilme, contentType);
+
+    response.status(updatedFilme.status_code);
+    response.json(updatedFilme);
+})
+
+app.delete('/v1/locadora/filme/:id', cors(), async (request, response) => {
+    let idFilme = request.params.id;
+
+    let deletedFilme = await controllerFilme.excluirFilme(idFilme);
+
+    response.status(deletedFilme.status_code);
+    response.json(deletedFilme);
+})
 // ====================================
 
 app.listen(PORT, () => {
