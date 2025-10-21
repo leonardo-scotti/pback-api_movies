@@ -90,11 +90,21 @@ WHERE id = id;
 CREATE TABLE tbl_personagem(
 	id_personagem INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(100) NOT NULL,
-	data_nacimento DATE NOT NULL,
+	data_nascimento DATE NOT NULL,
 	raca VARCHAR(50) NOT NULL,
 	descricao VARCHAR(500) NOT NULL,
     altura DECIMAL(10,2) NOT NULL,
     peso DECIMAL(65,3) NOT NULL
+);
+
+INSERT INTO tbl_personagem(nome, data_nascimento, raca, descricao, altura, peso)
+VALUES (
+    "Nome",
+    "DataNascimento",
+    "Raça",
+    "Descrição",
+    12.56,
+    150.890
 );
 
 UPDATE tbl_genero SET

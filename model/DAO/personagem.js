@@ -12,10 +12,10 @@ const { PrismaClient } = require('../../generated/prisma');
 const prisma = new PrismaClient();
 
 //Retorna todos os Gêneros no DB
-const getSelectAllLanguage = async () => {
+const getSelectAllCharacter = async () => {
     try {
         //Script SQL
-        let sql = `select * from tbl_idioma order by id desc`;
+        let sql = `select * from tbl_personagem order by id desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -33,10 +33,10 @@ const getSelectAllLanguage = async () => {
 };
 
 //Retorna um filme filtrando pelo ID do DB
-const getSelectByIdLanguage = async (id) => {
+const getSelectByIdCharacter = async (id) => {
     try {
         //Script SQL
-        let sql = `select * from tbl_idioma where id = ${id}`;
+        let sql = `select * from tbl_personagem where id = ${id}`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -53,10 +53,10 @@ const getSelectByIdLanguage = async (id) => {
     }
 };
 
-const getSelectLastIdLanguage = async () => {
+const getSelectLastIdCharacter = async () => {
     try {
         //Script SQL
-        let sql = `SELECT id FROM tbl_idioma ORDER BY id DESC LIMIT 1`;
+        let sql = `SELECT id FROM tbl_personagem ORDER BY id DESC LIMIT 1`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -74,11 +74,16 @@ const getSelectLastIdLanguage = async () => {
 }
 
 //Insere um filme no DB
-const setInsertLanguage = async (language) => {
+const setInsertCharacter = async (character) => {
     try {
-        let sql = `INSERT INTO tbl_idioma(idioma)
+        let sql = `INSERT INTO tbl_personagem(nome, data_nascimento, raca, descricao, altura, peso)
                     VALUES (
-                        '${language.idioma}'
+                        '${character.nome}',
+                        '${character.data_nascimento}',
+                        '${character.raca}',
+                        '${character.descricao}',
+                        ${character.altura},
+                        ${character.peso}
                     )`;
 
         let result = await prisma.$executeRawUnsafe(sql);
@@ -94,11 +99,16 @@ const setInsertLanguage = async (language) => {
 };
 
 //Atualiza um filme existente no DB filtrando pelo ID
-const setUpdateLanguage = async (language) => {
+const setUpdateCharacter = async (character) => {
     try {
-        let sql = `UPDATE tbl_genero SET 
-                        nome                =   '${language.nome}'
-                    WHERE id = ${language.id}`;
+        let sql = `UPDATE tbl_personagem SET
+                        nome                =   '${character.nome}'
+                        data_nascimento     =   '${character.data_nascimento}'
+                        raca                =   '${character.raca}'
+                        descricao           =   '${character.descricao}'
+                        altura              =   '${character.altura}'
+                        peso                =   '${character.peso}'
+                    WHERE id = ${character.id};`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 
@@ -113,9 +123,9 @@ const setUpdateLanguage = async (language) => {
 };
 
 //Deleta um filme existente no DB filtrando pelo ID
-const setDeleteLanguage = async (id) => {
+const setDeleteCharacter = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_genero WHERE id = ${id}`;
+        let sql = `DELETE FROM tbl_personagem WHERE id = ${id}`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 
@@ -129,10 +139,10 @@ const setDeleteLanguage = async (id) => {
 };
 
 module.exports ={
-    getSelectAllLanguage,
-    getSelectByIdLanguage,
-    getSelectLastIdLanguage,
-    setInsertLanguage,
-    setUpdateLanguage,
-    setDeleteLanguage
+    getSelectAllCharacter,
+    getSelectByIdCharacter,
+    getSelectLastIdCharacter,
+    setInsertCharacter,
+    setUpdateCharacter,
+    setDeleteCharacter
 }
