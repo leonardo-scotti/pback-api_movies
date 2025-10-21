@@ -13,7 +13,7 @@ const filmeDAO = require('../../model/DAO/filme.js');
 const MESSAGE_DEFAULT = require('../module/config_messages.js')
 
 
-//=========================== FUNÇÕES CRUD ===========================
+//=========================== FUNÇÕES C.R.U.D ===========================
 //Retorna uma lista de filmes
 const listarFilmes = async () => {
 
@@ -63,9 +63,9 @@ const buscarFilmeId = async (id) => {
             if (result) {
 
                 if (result.length > 0) {
-                    MESSAGE.HEADER.status           = MESSAGE.SUCESS_REQUEST.status;
-                    MESSAGE.HEADER.status_code      = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.movie   = result;
+                    MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status;
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code;
+                    MESSAGE.HEADER.response.movie = result;
 
                     return MESSAGE.HEADER; //200
                 } else {
@@ -97,11 +97,24 @@ const inserirFilme = async (filme, contentType) => {
                 //Chama a função do DAO para inserir um novo filme
                 let result = await filmeDAO.setInsertFilms(filme);
                 if (result) {
-                    MESSAGE.HEADER.status       = MESSAGE.SUCESS_CREATED_ITEM.status;
-                    MESSAGE.HEADER.status_code  = MESSAGE.SUCESS_CREATED_ITEM.status_code;
-                    MESSAGE.HEADER.message      = MESSAGE.SUCESS_CREATED_ITEM.message;
+                    //Chama a função para receber o ID gerado no DB
+                    let lastIdFilm = await filmeDAO.getSelectLastIdFilm();
 
-                    return MESSAGE.HEADER;
+                    if (lastIdFilm) {
+                        filmeInserido = {
+                            "id": lastIdFilm,
+                            ...filme
+                        }
+
+                        MESSAGE.HEADER.status       = MESSAGE.SUCESS_CREATED_ITEM.status;
+                        MESSAGE.HEADER.status_code  = MESSAGE.SUCESS_CREATED_ITEM.status_code;
+                        MESSAGE.HEADER.message      = MESSAGE.SUCESS_CREATED_ITEM.message;
+                        MESSAGE.HEADER.response     = filmeInserido;
+
+                        return MESSAGE.HEADER;
+                    } else {
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                    }
                 } else {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
                 }
@@ -139,10 +152,10 @@ const atualizarFilme = async (filme, id, contentType) => {
                     //Chama a função do DAO para atualizar um filme
                     let result = await filmeDAO.setUpdateFilms(filme);
                     if (result) {
-                        MESSAGE.HEADER.status       = MESSAGE.SUCESS_UPDATED_ITEM.status;
-                        MESSAGE.HEADER.status_code  = MESSAGE.SUCESS_UPDATED_ITEM.status_code;
-                        MESSAGE.HEADER.message      = MESSAGE.SUCESS_UPDATED_ITEM.message;
-                        MESSAGE.HEADER.response     = filme;
+                        MESSAGE.HEADER.status = MESSAGE.SUCESS_UPDATED_ITEM.status;
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCESS_UPDATED_ITEM.status_code;
+                        MESSAGE.HEADER.message = MESSAGE.SUCESS_UPDATED_ITEM.message;
+                        MESSAGE.HEADER.response = filme;
 
                         return MESSAGE.HEADER;
                     } else {
@@ -175,7 +188,7 @@ const excluirFilme = async (id) => {
 
             let result = await filmeDAO.setDeleteFilms(idFilme);
 
-            if(result) {
+            if (result) {
                 MESSAGE.HEADER.status = MESSAGE.SUCESS_DELETED_ITEM.status;
                 MESSAGE.HEADER.status_code = MESSAGE.SUCESS_DELETED_ITEM.status_code;
                 MESSAGE.HEADER.message = MESSAGE.SUCESS_DELETED_ITEM.message;

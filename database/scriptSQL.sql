@@ -2,6 +2,7 @@ CREATE DATABASE db_locadora_filme_ds2t_25_2;
 
 USE db_locadora_filme_ds2t_25_2;
 
+-- ========== FILME ==========
 CREATE TABLE tbl_filme(
 	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	nome VARCHAR(100) NOT NULL,
@@ -51,4 +52,43 @@ UPDATE tbl_filme SET
     orcamento           =   'orcamento',
     trailer             =   'trailer',
     capa                =   'capa'
-WHERE id = id
+WHERE id = id;
+
+SELECT id FROM tbl_filme ORDER BY id DESC LIMIT 1;
+
+-- ========== GÊNERO ==========
+CREATE TABLE tbl_genero(
+	id_genero INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	nome VARCHAR(20) NOT NULL
+);
+
+UPDATE tbl_genero SET
+    nome                =   'nome'
+WHERE id = id;
+
+-- ========== IDIOMA ==========
+CREATE TABLE tbl_idioma(
+	id_idioma INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	idioma VARCHAR(100) NOT NULL
+);
+
+-- ========== PERSONAGEM ==========
+CREATE TABLE tbl_personagem(
+	id_personagem INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	nome VARCHAR(100) NOT NULL,
+	data_nacimento DATE NOT NULL,
+	raca VARCHAR(50) NOT NULL,
+	descricao VARCHAR(500) NOT NULL,
+    altura DECIMAL(10,2) NOT NULL,
+    peso DECIMAL(65,3) NOT NULL
+);
+
+-- ========== DIRETOR ==========
+CREATE TABLE tbl_diretor(
+	id_diretor INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	nome VARCHAR(100) NOT NULL,
+	data_nacimento DATE NOT NULL,
+	altura DECIMAL(4,2) NULL,
+	peso DECIMAL(6,3) NULL,
+	patrimonio_liquido DECIMAL(14,2) NULL
+);
