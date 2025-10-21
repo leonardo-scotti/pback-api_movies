@@ -62,6 +62,11 @@ CREATE TABLE tbl_genero(
 	nome VARCHAR(20) NOT NULL
 );
 
+INSERT INTO tbl_genero(nome)
+VALUES (
+    'Nome'
+);
+
 UPDATE tbl_genero SET
     nome                =   'nome'
 WHERE id = id;
@@ -71,6 +76,15 @@ CREATE TABLE tbl_idioma(
 	id_idioma INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	idioma VARCHAR(100) NOT NULL
 );
+
+INSERT INTO tbl_idioma(idioma)
+VALUES (
+    'Idioma'
+);
+
+UPDATE tbl_genero SET
+    idioma                =   'idioma'
+WHERE id = id;
 
 -- ========== PERSONAGEM ==========
 CREATE TABLE tbl_personagem(
@@ -82,6 +96,15 @@ CREATE TABLE tbl_personagem(
     altura DECIMAL(10,2) NOT NULL,
     peso DECIMAL(65,3) NOT NULL
 );
+
+UPDATE tbl_genero SET
+    nome                =   'nome'
+    data_nascimento     =   'data_nascimento'
+    raca                =   'raca'
+    descricao           =   'descricao'
+    altura              =   'altura'
+    peso                =   'peso'
+WHERE id = id;
 
 -- ========== DIRETOR ==========
 CREATE TABLE tbl_diretor(
