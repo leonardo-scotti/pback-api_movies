@@ -27,7 +27,7 @@ const listGenrer = async () => {
 
                 MESSAGE.HEADER.status                   = MESSAGE.SUCESS_REQUEST.status;
                 MESSAGE.HEADER.status_code              = MESSAGE.SUCESS_REQUEST.status_code;
-                MESSAGE.HEADER.response.genrers.amount  = amount;
+                MESSAGE.HEADER.response.genrers_amount  = amount;
                 MESSAGE.HEADER.response.genrers         = result;
 
                 return MESSAGE.HEADER; //200
@@ -38,6 +38,7 @@ const listGenrer = async () => {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500    
     }
 }

@@ -83,11 +83,10 @@ const setInsertGenrer = async (genrer) => {
 
         let result = await prisma.$executeRawUnsafe(sql);
 
-        if (result) {
-            return true;
-        } else {
+        if (Array.isArray(result))
+            return result;
+        else
             return false;
-        }
     } catch (error) {
         return false;
     };

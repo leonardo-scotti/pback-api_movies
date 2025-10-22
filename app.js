@@ -91,11 +91,22 @@ app.delete('/v1/locadora/filme/:id', cors(), async (request, response) => {
 // ==========================================
 
 // ========== ENDPOINTS CRUD FILME ==========
+//EndPoint que lista todos os Gêneros
 app.get('/v1/locadora/genero', cors(), async (request, response) => {
     let genrers = await controllerGenrer.listGenrer()
 
     response.status(genrers.status_code);
     response.json(genrers);
+})
+
+//EndPoint que retorna um Gênero filtrando por ID
+app.get('/v1/locadora/genero/:id', cors(), async (request, response) => {
+    let idGenrer = request.params.id
+
+    let genrer = await controllerGenrer.searchGenrerById(idGenrer);
+
+    response.status(genrer.status_code);
+    response.json(genrer);
 })
 // ==========================================
 
