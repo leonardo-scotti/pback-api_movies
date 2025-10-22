@@ -56,14 +56,14 @@ const getSelectByIdGenrer = async (id) => {
 const getSelectLastIdGenrer = async () => {
     try {
         //Script SQL
-        let sql = `SELECT id FROM tbl_genero ORDER BY id_genero DESC LIMIT 1`;
+        let sql = `SELECT id_genero FROM tbl_genero ORDER BY id_genero DESC LIMIT 1`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
 
         //Validação para identificar se o retorno do DB é um ARRAY (vazio ou com dados)
         if (Array.isArray(result))
-            return Number(result[0].id);
+            return Number(result[0].id_genero);
         else
             return false;
 
@@ -76,17 +76,19 @@ const getSelectLastIdGenrer = async () => {
 //Insere um filme no DB
 const setInsertGenrer = async (genrer) => {
     try {
-        let sql = `INSERT INTO tbl_genero(nome)
+        let sql = `INSERT INTO tbl_genero(nome, descricao)
                     VALUES (
-                        '${genrer.nome}'
+                        '${genrer.nome}',
+                        '${genrer.descricao}'
                     )`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 
-        if (Array.isArray(result))
-            return result;
-        else
+        if (result) {
+            return true;
+        } else {
             return false;
+        }
     } catch (error) {
         return false;
     };
@@ -96,7 +98,8 @@ const setInsertGenrer = async (genrer) => {
 const setUpdateGenrer = async (genrer) => {
     try {
         let sql = `UPDATE tbl_genero SET 
-                        nome                =   '${genrer.nome}'
+                        nome                =   '${genrer.nome}',
+                        descricao           =   '${genrer.descricao}'
                     WHERE id_genero = ${genrer.id}`;
 
         let result = await prisma.$executeRawUnsafe(sql);

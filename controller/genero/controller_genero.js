@@ -62,7 +62,7 @@ const searchGenrerById = async (id) => {
                 if(result.length > 0) {
                     MESSAGE.HEADER.status       = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code  = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.response            = result;
+                    MESSAGE.HEADER.response            = result;
 
                     return MESSAGE.HEADER //200
                 } else {
@@ -87,8 +87,9 @@ const insertGenrer = async (genrer, contentType) => {
     try {
         //Verifica se o tipo de dado enviado é um JSON
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            //Verifica se o gênero foi enviado de forma correta
-            if(genrer.nome != '' && genrer.nome != undefined && genrer.nome != null) {
+            //Chama a função que valida os dados
+            let validarDadosGenrer = validarDados(genrer);
+            if(!validarDadosGenrer) {
                 //Chama a função do DAO que insere o gênero no DB
                 let result = await genrerDAO.setInsertGenrer(genrer);
 
@@ -118,8 +119,7 @@ const insertGenrer = async (genrer, contentType) => {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
                 }
             } else {
-                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!'
-                return MESSAGE.ERROR_REQUIRED_FIELDS; //400
+                return validarDados
             }
 
         } else {
@@ -137,8 +137,9 @@ const updateGenrer = async (genrer, id, contentType) => {
     try {
         //Verifica se o tipo de dado enviado é um JSON
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            //Verifica se o gênero foi enviado de forma correta
-            if(genrer.nome != '' && genrer.nome != undefined && genrer.nome != null) {
+            //Chama a função que valida os dados
+            let validarDadosGenrer = validarDados(genrer)
+            if(!validarDadosGenrer) {
                 //Chama a função para validar a consistência do ID e verificar se ele existe no DB
                 let validarID = await searchGenrerById(id);
 
@@ -168,8 +169,7 @@ const updateGenrer = async (genrer, id, contentType) => {
                     return validarID; //400 - 404 - 500
                 }
             } else {
-                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!'
-                return MESSAGE.ERROR_REQUIRED_FIELDS; //400
+                return validarDadosGenrer;
             }
 
         } else {
@@ -193,7 +193,7 @@ const deleteGenrer = async (id) => {
             let idGenrer = parseInt(id);
 
             //Chama a função do DAO que exclui um gênero do DB
-            let result = await genrerDAO.deleteGenrer();
+            let result = await genrerDAO.setDeleteGenrer(idGenrer);
 
             //Verifica se a função deu certo
             if(result) {
@@ -210,10 +210,28 @@ const deleteGenrer = async (id) => {
             return validarID; //400 - 404 - 500
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 }
 
+// ==================== FUNÇÕES CONTROLLER ===================
+const validarDados = (genrer) => {
+    //Cópia do objeto MESSAGE_DEFAULT
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
+
+    if(genrer.nome == '' || genrer.nome == null || genrer.nome == undefined || genrer.nome.length > 20) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!';
+
+        return MESSAGE.ERROR_REQUIRED_FIELDS
+    } else if(genrer.descricao == '' || genrer.descricao == null || genrer.descricao == undefined || genrer.descricao.length > 200) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [DESCRICAO] inválido!';
+
+        return MESSAGE.ERROR_REQUIRED_FIELDS
+    } else {
+        return false;
+    }
+}
 module.exports = {
     listGenrer,
     searchGenrerById,

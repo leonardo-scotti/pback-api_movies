@@ -108,6 +108,39 @@ app.get('/v1/locadora/genero/:id', cors(), async (request, response) => {
     response.status(genrer.status_code);
     response.json(genrer);
 })
+
+//EndPoint que adiciona um Gênero no DB
+app.post('/v1/locadora/genero', cors(), bodyParserJSON, async (request, response) => {
+    let genrerBody = request.body;
+    let contentType = request.headers['content-type'];
+
+    let genrerInserted = await controllerGenrer.insertGenrer(genrerBody, contentType);
+
+    response.status(genrerInserted.status_code);
+    response.json(genrerInserted);
+})
+
+//EndPoint que atualiza um Gênero já existente no DB
+app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async (request, response) => {
+    let idGenrer = request.params.id
+    let genrerBody = request.body;
+    let contentType = request.headers['content-type'];
+
+    let genrerUpdated = await controllerGenrer.updateGenrer(genrerBody, idGenrer, contentType);
+
+    response.status(genrerUpdated.status_code);
+    response.json(genrerUpdated);
+})
+
+//EndPoint que deleta um Gênero no DB
+app.delete('/v1/locadora/genero/:id', cors(), async (request, response) => {
+    let idGenrer = request.params.id;
+
+    let genrerDeleted = await controllerGenrer.deleteGenrer(idGenrer);
+
+    response.status(genrerDeleted.status_code);
+    response.json(genrerDeleted);
+})
 // ==========================================
 
 app.listen(PORT, () => {
