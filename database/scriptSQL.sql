@@ -82,7 +82,7 @@ VALUES (
     'Idioma'
 );
 
-UPDATE tbl_genero SET
+UPDATE tbl_idioma SET
     idioma                =   'idioma'
 WHERE id = id;
 
@@ -107,7 +107,7 @@ VALUES (
     150.890
 );
 
-UPDATE tbl_genero SET
+UPDATE tbl_personagem SET
     nome                =   'nome'
     data_nascimento     =   'data_nascimento'
     raca                =   'raca'
@@ -120,8 +120,26 @@ WHERE id = id;
 CREATE TABLE tbl_diretor(
 	id_diretor INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(100) NOT NULL,
-	data_nacimento DATE NOT NULL,
+	data_nascimento DATE NOT NULL,
 	altura DECIMAL(4,2) NULL,
 	peso DECIMAL(6,3) NULL,
 	patrimonio_liquido DECIMAL(14,2) NULL
 );
+
+INSERT INTO tbl_diretor(nome, data_nascimento, altura, peso, patrimonio_liquido)
+VALUES (
+    "Nome",
+    "DataNascimento",
+    "Raça",
+    "Descrição",
+    12.56,
+    150.890
+);
+
+UPDATE tbl_diretor SET
+    nome                =   'nome'
+    data_nascimento     =   'data_nascimento'
+    altura              =   'altura'
+    peso                =   'peso'
+    patrimonio_liquido  =   'patrimonio_lilquido'
+WHERE id = id;
