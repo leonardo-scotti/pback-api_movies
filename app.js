@@ -12,7 +12,10 @@ const bodyParser = require('body-parser');
 
 // ========== IMPORT'S CONTROLLER'S ==========
 //Controller Filme
-const controllerFilme = require('./controller/filme/controller_filme.js')
+const controllerFilme = require('./controller/filme/controller_filme.js');
+
+//Controller Gênero
+const controllerGenrer = require('./controller/genero/controller_genero.js');
 
 // ===========================================
 
@@ -34,7 +37,7 @@ app.use((request, response, next) => {
     next();
 })
 
-// ========== ENDPOINTS CRUD ==========
+// ========== ENDPOINTS CRUD FILME ==========
 //EndPoint que retorna a lista de filmes
 app.get('/v1/locadora/filme', cors(), async (request, response) => {
     let filmes = await controllerFilme.listarFilmes();
