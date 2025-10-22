@@ -88,7 +88,16 @@ app.delete('/v1/locadora/filme/:id', cors(), async (request, response) => {
     response.status(deletedFilme.status_code);
     response.json(deletedFilme);
 })
-// ====================================
+// ==========================================
+
+// ========== ENDPOINTS CRUD FILME ==========
+app.get('/v1/locadora/genero', cors(), async (request, response) => {
+    let genrers = await controllerGenrer.listGenrer()
+
+    response.status(genrers.status_code);
+    response.json(genrers);
+})
+// ==========================================
 
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')

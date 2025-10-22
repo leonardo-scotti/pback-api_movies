@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
 const getSelectAllGenrer = async () => {
     try {
         //Script SQL
-        let sql = `select * from tbl_genero order by id desc`;
+        let sql = `select * from tbl_genero order by id_genero desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -36,7 +36,7 @@ const getSelectAllGenrer = async () => {
 const getSelectByIdGenrer = async (id) => {
     try {
         //Script SQL
-        let sql = `select * from tbl_genero where id = ${id}`;
+        let sql = `select * from tbl_genero where id_genero = ${id}`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -56,7 +56,7 @@ const getSelectByIdGenrer = async (id) => {
 const getSelectLastIdGenrer = async () => {
     try {
         //Script SQL
-        let sql = `SELECT id FROM tbl_genero ORDER BY id DESC LIMIT 1`;
+        let sql = `SELECT id FROM tbl_genero ORDER BY id_genero DESC LIMIT 1`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -98,7 +98,7 @@ const setUpdateGenrer = async (genrer) => {
     try {
         let sql = `UPDATE tbl_genero SET 
                         nome                =   '${genrer.nome}'
-                    WHERE id = ${genrer.id}`;
+                    WHERE id_genero = ${genrer.id}`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 
@@ -115,7 +115,7 @@ const setUpdateGenrer = async (genrer) => {
 //Deleta um filme existente no DB filtrando pelo ID
 const setDeleteGenrer = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_genero WHERE id = ${id}`;
+        let sql = `DELETE FROM tbl_genero WHERE id_genero = ${id}`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 
