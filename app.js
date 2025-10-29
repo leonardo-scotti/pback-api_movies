@@ -17,8 +17,6 @@ const controllerFilme = require('./controller/filme/controller_filme.js');
 //Controller Gênero
 const controllerGenrer = require('./controller/genero/controller_genero.js');
 
-//Controller Idioma
-const controllerLanguage = require('./controller/idioma/controller_idioma.js');
 // ===========================================
 
 //Cria um objeto especialista no formato JSON para receber os dados no body (POST e PUT)
@@ -92,7 +90,7 @@ app.delete('/v1/locadora/filme/:id', cors(), async (request, response) => {
 })
 // ==========================================
 
-// ========== ENDPOINTS CRUD GÊNERO ==========
+// ========== ENDPOINTS CRUD FILME ==========
 //EndPoint que lista todos os Gêneros
 app.get('/v1/locadora/genero', cors(), async (request, response) => {
     let genrers = await controllerGenrer.listGenrer()
@@ -143,6 +141,7 @@ app.delete('/v1/locadora/genero/:id', cors(), async (request, response) => {
     response.status(genrerDeleted.status_code);
     response.json(genrerDeleted);
 })
+<<<<<<< HEAD
 // ===========================================
 
 // ========== ENDPOINTS CRUD IDIOMA ==========
@@ -198,6 +197,9 @@ app.delete('/v1/locadora/idioma/:id', cors(), async (request, response) => {
     response.json(languageDeleted);
 })
 // ===========================================
+=======
+// ==========================================
+>>>>>>> parent of f1abcec (Controller Idioma parcialmente pronto)
 
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')

@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
 const getSelectAllLanguage = async () => {
     try {
         //Script SQL
-        let sql = `select * from tbl_idioma order by id_idioma desc`;
+        let sql = `select * from tbl_idioma order by id desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -36,7 +36,7 @@ const getSelectAllLanguage = async () => {
 const getSelectByIdLanguage = async (id) => {
     try {
         //Script SQL
-        let sql = `select * from tbl_idioma where id_idioma = ${id}`;
+        let sql = `select * from tbl_idioma where id = ${id}`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
