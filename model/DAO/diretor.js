@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
 const getSelectAllDirector = async () => {
     try {
         //Script SQL
-        let sql = `select * from tbl_diretor order by id desc`;
+        let sql = `select * from tbl_diretor order by id_diretor desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -36,7 +36,7 @@ const getSelectAllDirector = async () => {
 const getSelectByIdDirector = async (id) => {
     try {
         //Script SQL
-        let sql = `select * from tbl_diretor where id = ${id}`;
+        let sql = `select * from tbl_diretor where id_diretor = ${id}`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -56,7 +56,7 @@ const getSelectByIdDirector = async (id) => {
 const getSelectLastIdDirector = async () => {
     try {
         //Script SQL
-        let sql = `SELECT id FROM tbl_diretor ORDER BY id DESC LIMIT 1`;
+        let sql = `SELECT id_diretor FROM tbl_diretor ORDER BY id_diretor DESC LIMIT 1`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -106,7 +106,7 @@ const setUpdateDirector = async (director) => {
                         altura              =   ${director.altura}
                         peso                =   ${director.peso}
                         patrimonio_liquido  =   ${director.patrimonio_liquido}
-                    WHERE id = ${director.id};`;
+                    WHERE id_diretor = ${director.id};`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 
@@ -123,7 +123,7 @@ const setUpdateDirector = async (director) => {
 //Deleta um filme existente no DB filtrando pelo ID
 const setDeleteDirector = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_diretor WHERE id = ${id}`;
+        let sql = `DELETE FROM tbl_diretor WHERE id_diretor = ${id}`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 

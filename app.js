@@ -163,6 +163,40 @@ app.get('/v1/locadora/idioma/:id', cors(), async (request, response) => {
     response.status(language.status_code);
     response.json(language);
 })
+
+//EndPoint que insere uma linguagem no DB
+app.post('/v1/locadora/idioma', cors(), bodyParserJSON, async (request, response) => {
+    let languageBody = request.body;
+    let contentType = request.headers['content-type'];
+
+    let languageInserted = await controllerLanguage.insertLanguage(languageBody, contentType);
+    console.log(languageInserted)
+
+    response.status(languageInserted.status_code);
+    response.json(languageInserted);
+})
+
+//EndPoint que atualiza uma lingaugem no DB
+app.put('/v1/locadora/idioma/:id', cors(), bodyParserJSON, async (request, response) => {
+    let idLanguage = request.params.id;
+    let languageBody = request.body
+    let contentType = request.headers['content-type'];
+
+    let languageUpdated = await controllerLanguage.updateLanguage(languageBody, idLanguage, contentType);
+
+    response.status(languageUpdated.status_code);
+    response.json(languageUpdated);
+})
+
+//EndPoint que deleta uma linguagem no DB
+app.delete('/v1/locadora/idioma/:id', cors(), async (request, response) => {
+    let idLanguage = request.params.id;
+
+    let languageDeleted = await controllerLanguage.deleteLanguage(idLanguage);
+
+    response.status(languageDeleted.status_code);
+    response.json(languageDeleted);
+})
 // ===========================================
 
 app.listen(PORT, () => {
