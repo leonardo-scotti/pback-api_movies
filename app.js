@@ -17,6 +17,12 @@ const controllerFilme = require('./controller/filme/controller_filme.js');
 //Controller Gênero
 const controllerGenrer = require('./controller/genero/controller_genero.js');
 
+//Controller Idioma
+const controllerLanguage = require('./controller/idioma/controller_idioma.js');
+
+//Controller Diretor
+const controllerDirector = require('./controller/diretor/controller_diretor.js');
+
 // ===========================================
 
 //Cria um objeto especialista no formato JSON para receber os dados no body (POST e PUT)
@@ -141,7 +147,6 @@ app.delete('/v1/locadora/genero/:id', cors(), async (request, response) => {
     response.status(genrerDeleted.status_code);
     response.json(genrerDeleted);
 })
-<<<<<<< HEAD
 // ===========================================
 
 // ========== ENDPOINTS CRUD IDIOMA ==========
@@ -197,9 +202,59 @@ app.delete('/v1/locadora/idioma/:id', cors(), async (request, response) => {
     response.json(languageDeleted);
 })
 // ===========================================
-=======
-// ==========================================
->>>>>>> parent of f1abcec (Controller Idioma parcialmente pronto)
+
+// ========== ENDPOINTS CRUD DIRETOR ==========
+//EndPoint que retorna todos os diretores do DB
+app.get('/v1/locadora/diretor', cors(), async (request, response) => {
+    let directors = await controllerDirector.listDirector();
+
+    response.status(directors.status_code);
+    response.json(directors);
+})
+
+//EndPoint que retorna um diretor filtrando pelo ID
+app.get('/v1/locadora/diretor/:id', cors(), async (request, response) => {
+    let idDirector = request.params.id;
+
+    let director = await controllerDirector.searchDirectorById(idDirector);
+
+    response.status(director.status_code);
+    response.json(director);
+})
+
+//EndPoint que  insere um diretor no DB
+app.post('/v1/locadora/diretor', cors(), bodyParserJSON, async (request, response) => {
+    let directorBody = request.body;
+    let contentType = request.headers['content-type'];
+
+    let directorInserted = await controllerDirector.insertDirector(directorBody, contentType);
+
+    response.status(directorInserted.status_code);
+    response.json(directorInserted);
+})
+
+//EndPoint que atualiza um diretor no DB
+app.put('/v1/locadora/diretor/:id', cors(), bodyParserJSON, async (request, response) => {
+    let idDirector = request.params.id;
+    let directorBody = request.body;
+    let contentType = request.headers['content-type'];
+
+    let directorUpdated = await controllerDirector.updateDirector(directorBody, idDirector, contentType);
+    
+    response.status(directorUpdated.status_code);
+    response.json(directorUpdated);
+})
+
+//EndPoint que deleta um diretor do DB
+app.delete('/v1/locadora/diretor/:id', cors(), async (request, response) => {
+    let idDirector = request.params.id;
+
+    let directorDeleted = await controllerDirector.deleteDirector(idDirector);
+    
+    response.status(directorDeleted.status_code);
+    response.json(directorDeleted);
+})
+// ============================================
 
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')

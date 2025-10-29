@@ -63,7 +63,7 @@ const getSelectLastIdDirector = async () => {
 
         //Validação para identificar se o retorno do DB é um ARRAY (vazio ou com dados)
         if (Array.isArray(result))
-            return Number(result[0].id);
+            return Number(result[0].id_diretor);
         else
             return false;
 
@@ -101,10 +101,10 @@ const setInsertDirector = async (director) => {
 const setUpdateDirector = async (director) => {
     try {
         let sql = `UPDATE tbl_diretor SET
-                        nome                =   '${director.nome}'
-                        data_nascimento     =   '${director.data_nascimento}'
-                        altura              =   ${director.altura}
-                        peso                =   ${director.peso}
+                        nome                =   '${director.nome}',
+                        data_nascimento     =   '${director.data_nascimento}',
+                        altura              =   ${director.altura},
+                        peso                =   ${director.peso},
                         patrimonio_liquido  =   ${director.patrimonio_liquido}
                     WHERE id_diretor = ${director.id};`;
 
@@ -124,6 +124,7 @@ const setUpdateDirector = async (director) => {
 const setDeleteDirector = async (id) => {
     try {
         let sql = `DELETE FROM tbl_diretor WHERE id_diretor = ${id}`;
+        console.log(sql)
 
         let result = await prisma.$executeRawUnsafe(sql);
 

@@ -67,7 +67,7 @@ const searchLanguageById = async (id) => {
 
                     return MESSAGE.HEADER;
                 } else {
-                    return MESSAGE.ERROR_NOT_FOUND; //500
+                    return MESSAGE.ERROR_NOT_FOUND; //404
                 }
             } else {
                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
@@ -201,6 +201,9 @@ const deleteLanguage = async (id) => {
 
 // ==================== FUNÇÕES CONTROLLER ===================
 const validarDados = (language) => {
+    //Cópia do objeto MESSAGE_DEFAULT
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
+
     if (!isNaN(language.idioma) || language.idioma == '' || language.idioma == null || language.idioma == undefined) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [IDIOMA] inválido!'
 
