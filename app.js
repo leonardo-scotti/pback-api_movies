@@ -10,6 +10,9 @@ const express    = require('express');
 const cors       = require('cors');
 const bodyParser = require('body-parser');
 
+// ========== IMPORT'S ROUTES ==========
+const moviesRoutes = require('./routes/filme/routes_filme.js');
+
 // ========== IMPORT'S CONTROLLER'S ==========
 //Controller Filme
 const controllerFilme = require('./controller/filme/controller_filme.js');
@@ -43,58 +46,7 @@ app.use((request, response, next) => {
     next();
 })
 
-// ========== ENDPOINTS CRUD FILME ==========
-//EndPoint que retorna a lista de filmes
-app.get('/v1/locadora/filme', cors(), async (request, response) => {
-    let filmes = await controllerFilme.listarFilmes();
-
-    response.status(filmes.status_code);
-    response.json(filmes);
-});
-
-//EndPoint que retorna um filme filtrando pelo ID
-app.get('/v1/locadora/filme/:id', cors(), async (request, response) => {
-    let id = request.params.id;
-
-    let filme = await controllerFilme.buscarFilmeId(id);
-
-    response.status(filme.status_code);
-    response.json(filme);
-});
-
-//EndPoint que insere um filme no DB
-app.post('/v1/locadora/filme', cors(), bodyParserJSON, async (request, response) => {
-    let filmeBody = request.body;
-
-    let contentType = request.headers['content-type'];
-
-    let setFilme = await controllerFilme.inserirFilme(filmeBody, contentType);
-
-    response.status(setFilme.status_code);
-    response.json(setFilme);
-})
-
-//EndPoint que atualiza um filme no DB
-app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async (request, response) => {
-    let idFilme     = request.params.id;
-    let filmeBody   = request.body;
-    let contentType = request.headers['content-type'];
-
-    updatedFilme = await controllerFilme.atualizarFilme(filmeBody, idFilme, contentType);
-
-    response.status(updatedFilme.status_code);
-    response.json(updatedFilme);
-})
-
-app.delete('/v1/locadora/filme/:id', cors(), async (request, response) => {
-    let idFilme = request.params.id;
-
-    let deletedFilme = await controllerFilme.excluirFilme(idFilme);
-
-    response.status(deletedFilme.status_code);
-    response.json(deletedFilme);
-})
-// ==========================================
+app.use('/v1/locadora/filme', cors(), bodyParserJSON, moviesRoutes);
 
 // ========== ENDPOINTS CRUD FILME ==========
 //EndPoint que lista todos os Gêneros
