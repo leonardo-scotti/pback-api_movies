@@ -111,7 +111,7 @@ const inserirFilme = async (filme, contentType) => {
                         MESSAGE.HEADER.message      = MESSAGE.SUCESS_CREATED_ITEM.message;
                         MESSAGE.HEADER.response     = filmeInserido;
 
-                        return MESSAGE.HEADER;
+                        return MESSAGE.HEADER; //201
                     } else {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                     }
@@ -157,7 +157,7 @@ const atualizarFilme = async (filme, id, contentType) => {
                         MESSAGE.HEADER.message = MESSAGE.SUCESS_UPDATED_ITEM.message;
                         MESSAGE.HEADER.response = filme;
 
-                        return MESSAGE.HEADER;
+                        return MESSAGE.HEADER; //201
                     } else {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
                     }
