@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
 const getSelectAllCharacter = async () => {
     try {
         //Script SQL
-        let sql = `select * from tbl_personagem order by id desc`;
+        let sql = `select * from tbl_personagem order by id_personagem desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -36,7 +36,7 @@ const getSelectAllCharacter = async () => {
 const getSelectByIdCharacter = async (id) => {
     try {
         //Script SQL
-        let sql = `select * from tbl_personagem where id = ${id}`;
+        let sql = `select * from tbl_personagem where id_personagem = ${id}`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -56,14 +56,14 @@ const getSelectByIdCharacter = async (id) => {
 const getSelectLastIdCharacter = async () => {
     try {
         //Script SQL
-        let sql = `SELECT id FROM tbl_personagem ORDER BY id DESC LIMIT 1`;
+        let sql = `SELECT id_personagem FROM tbl_personagem ORDER BY id_personagem DESC LIMIT 1`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
 
         //Validação para identificar se o retorno do DB é um ARRAY (vazio ou com dados)
         if (Array.isArray(result))
-            return Number(result[0].id);
+            return Number(result[0].id_personagem);
         else
             return false;
 
@@ -102,14 +102,14 @@ const setInsertCharacter = async (character) => {
 const setUpdateCharacter = async (character) => {
     try {
         let sql = `UPDATE tbl_personagem SET
-                        nome                =   '${character.nome}'
-                        data_nascimento     =   '${character.data_nascimento}'
-                        raca                =   '${character.raca}'
-                        descricao           =   '${character.descricao}'
-                        altura              =   '${character.altura}'
+                        nome                =   '${character.nome}',
+                        data_nascimento     =   '${character.data_nascimento}',
+                        raca                =   '${character.raca}',
+                        descricao           =   '${character.descricao}',
+                        altura              =   '${character.altura}',
                         peso                =   '${character.peso}'
-                    WHERE id = ${character.id};`;
-
+                    WHERE id_personagem = ${character.id};`;
+                    
         let result = await prisma.$executeRawUnsafe(sql);
 
         if (result) {
@@ -125,7 +125,7 @@ const setUpdateCharacter = async (character) => {
 //Deleta um filme existente no DB filtrando pelo ID
 const setDeleteCharacter = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_personagem WHERE id = ${id}`;
+        let sql = `DELETE FROM tbl_personagem WHERE id_personagem = ${id}`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 

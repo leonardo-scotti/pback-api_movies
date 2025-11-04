@@ -11,17 +11,20 @@ const cors       = require('cors');
 const bodyParser = require('body-parser');
 
 // ========== IMPORT'S ROUTES ==========
-//Filmes
+//FILMES
 const moviesRoutes = require('./routes/filme/routes_filme.js');
 
-//Gênero
+//GÊNERO
 const genrersRoutes = require('./routes/genero/routes_genero.js');
 
-//Idioma
+//IDIOMA
 const languageRoutes = require('./routes/idioma/routes_idioma.js');
 
-//Diretor
+//DIRETOR
 const directorRoutes = require('./routes/diretor/routes_diretor.js');
+
+//PERSONAGEM
+const characterRoutes = require('./routes/personagem/routes_personagem.js');
 // =====================================
 
 //Cria um objeto especialista no formato JSON para receber os dados no body (POST e PUT)
@@ -54,6 +57,9 @@ app.use('/v1/locadora/idioma', cors(), bodyParserJSON, languageRoutes);
 
 //DIRETOR
 app.use('/v1/locadora/diretor', cors(), bodyParserJSON, directorRoutes);
+
+//PERSONAGEM
+app.use('/v1/locadora/personagem', cors(), bodyParserJSON, characterRoutes);
 // =============================================================
 
 
