@@ -1,6 +1,6 @@
 /*******************************************************************************************
- * Objetivo: Arquivo respnsável pela realização do CRUD de idioma no Banco de Dados MySQL
- * Data: 21/10/2025
+ * Objetivo: Arquivo respnsável pela realização do CRUD de sexo no Banco de Dados MySQL
+ * Data: 04/11/2025
  * Autor: Leonardo Scotti
  * Versão: 1.0
  ******************************************************************************************/
@@ -11,11 +11,11 @@ const { PrismaClient } = require('../../generated/prisma');
 //Cria um objeto do @prisma/client para manipular os scripts SQL
 const prisma = new PrismaClient();
 
-//Retorna todos os Idiomas no DB
-const getSelectAllLanguage = async () => {
+//Retorna todos os Sexos no DB
+const getSelectAllSex = async () => {
     try {
         //Script SQL
-        let sql = `select * from tbl_idioma order by id_idioma desc`;
+        let sql = `select * from tbl_sexo order by id_sexo desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -32,11 +32,11 @@ const getSelectAllLanguage = async () => {
     }
 };
 
-//Retorna um idioma filtrando pelo ID do DB
-const getSelectByIdLanguage = async (id) => {
+//Retorna um Sexo filtrando pelo ID do DB
+const getSelectByIdSex = async (id) => {
     try {
         //Script SQL
-        let sql = `select * from tbl_idioma where id = ${id}`;
+        let sql = `select * from tbl_sexo where id_sexo = ${id}`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -53,17 +53,17 @@ const getSelectByIdLanguage = async (id) => {
     }
 };
 
-const getSelectLastIdLanguage = async () => {
+const getSelectLastIdSex = async () => {
     try {
         //Script SQL
-        let sql = `SELECT id_idioma FROM tbl_idioma ORDER BY id_idioma DESC LIMIT 1`;
+        let sql = `SELECT id_sexo FROM tbl_sexo ORDER BY id_sexo DESC LIMIT 1`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
 
         //Validação para identificar se o retorno do DB é um ARRAY (vazio ou com dados)
         if (Array.isArray(result))
-            return Number(result[0].id_idioma);
+            return Number(result[0].id_sexo);
         else
             return false;
 
@@ -73,12 +73,12 @@ const getSelectLastIdLanguage = async () => {
     }
 }
 
-//Insere um idioma no DB
-const setInsertLanguage = async (language) => {
+//Insere um Sexo no DB
+const setInsertSex = async (sex) => {
     try {
-        let sql = `INSERT INTO tbl_idioma(idioma)
+        let sql = `INSERT INTO tbl_sexo(sexo)
                     VALUES (
-                        '${language.idioma}'
+                        '${sex.sexo}'
                     )`;
 
         let result = await prisma.$executeRawUnsafe(sql);
@@ -93,12 +93,12 @@ const setInsertLanguage = async (language) => {
     };
 };
 
-//Atualiza um idioma existente no DB filtrando pelo ID
-const setUpdateLanguage = async (language) => {
+//Atualiza um Sexo existente no DB filtrando pelo ID
+const setUpdateSex = async (sex) => {
     try {
-        let sql = `UPDATE tbl_idioma SET 
-                        idioma                =   '${language.idioma}'
-                    WHERE id_idioma = ${language.id}`;
+        let sql = `UPDATE tbl_sexo SET 
+                        sexo                =   '${sex.sexo}'
+                    WHERE id_sexo = ${sex.id}`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 
@@ -112,10 +112,10 @@ const setUpdateLanguage = async (language) => {
     };
 };
 
-//Deleta um idioma existente no DB filtrando pelo ID
-const setDeleteLanguage = async (id) => {
+//Deleta um sexo existente no DB filtrando pelo ID
+const setDeleteSex = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_idioma WHERE id_idioma = ${id}`;
+        let sql = `DELETE FROM tbl_sexo WHERE id_sexo = ${id}`;
 
         let result = await prisma.$executeRawUnsafe(sql);
 
@@ -128,11 +128,11 @@ const setDeleteLanguage = async (id) => {
     }
 };
 
-module.exports ={
-    getSelectAllLanguage,
-    getSelectByIdLanguage,
-    getSelectLastIdLanguage,
-    setInsertLanguage,
-    setUpdateLanguage,
-    setDeleteLanguage
+module.exports = {
+    getSelectAllSex,
+    getSelectByIdSex,
+    getSelectLastIdSex,
+    setInsertSex,
+    setUpdateSex,
+    setDeleteSex
 }

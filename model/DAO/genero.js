@@ -32,7 +32,7 @@ const getSelectAllGenrer = async () => {
     }
 };
 
-//Retorna um filme filtrando pelo ID do DB
+//Retorna um gênero filtrando pelo ID do DB
 const getSelectByIdGenrer = async (id) => {
     try {
         //Script SQL
@@ -73,7 +73,7 @@ const getSelectLastIdGenrer = async () => {
     }
 }
 
-//Insere um filme no DB
+//Insere um gênero no DB
 const setInsertGenrer = async (genrer) => {
     try {
         let sql = `INSERT INTO tbl_genero(nome, descricao)
@@ -94,7 +94,7 @@ const setInsertGenrer = async (genrer) => {
     };
 };
 
-//Atualiza um filme existente no DB filtrando pelo ID
+//Atualiza um gênero existente no DB filtrando pelo ID
 const setUpdateGenrer = async (genrer) => {
     try {
         let sql = `UPDATE tbl_genero SET 
@@ -114,7 +114,7 @@ const setUpdateGenrer = async (genrer) => {
     };
 };
 
-//Deleta um filme existente no DB filtrando pelo ID
+//Deleta um gênero existente no DB filtrando pelo ID
 const setDeleteGenrer = async (id) => {
     try {
         let sql = `DELETE FROM tbl_genero WHERE id_genero = ${id}`;

@@ -7,19 +7,19 @@
  ******************************************************************************************/
 
 //Import do arquivo DAO para manipular o CRUD no DB
-const genrerDAO = require('../../model/DAO/genero.js');
+const sexDAO = require('../../model/DAO/sexo.js');
 
 //Import do arquivo que padroniza as mensagens
 const MESSAGE_DEFAULT = require('../module/config_messages.js')
 
 // ==================== FUNÇÕES C.R.U.D ====================
-const listGenrer = async () => {
+const listSex = async () => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
-        //Guada o resultado da função do DAO que lista os Gêneros
-        let result = await genrerDAO.getSelectAllGenrer();
+        //Guada o resultado da função do DAO que lista os sexos
+        let result = await sexDAO.getSelectAllSex();
 
         if (result) {
             if (result.length > 0) {
@@ -27,8 +27,8 @@ const listGenrer = async () => {
 
                 MESSAGE.HEADER.status                   = MESSAGE.SUCESS_REQUEST.status;
                 MESSAGE.HEADER.status_code              = MESSAGE.SUCESS_REQUEST.status_code;
-                MESSAGE.HEADER.response.genrers_amount  = amount;
-                MESSAGE.HEADER.response.genrers         = result;
+                MESSAGE.HEADER.response.sexs_amount  = amount;
+                MESSAGE.HEADER.response.sexs        = result;
 
                 return MESSAGE.HEADER; //200
             } else {
@@ -43,7 +43,7 @@ const listGenrer = async () => {
     }
 }
 
-const searchGenrerById = async (id) => {
+const searchSexById = async (id) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -53,8 +53,8 @@ const searchGenrerById = async (id) => {
             //Preserva o argumento e tranforma em INT
             let idInt = parseInt(id);
 
-            //Guarda o resultado da função do DAO que filtra um Gênero por ID
-            let result = await genrerDAO.getSelectByIdGenrer(idInt);
+            //Guarda o resultado da função do DAO que filtra um sexo por ID
+            let result = await sexDAO.getSelectByIdSex(idInt);
 
             //Verifica se a função do DAO deu certo
             if(result) {
@@ -73,6 +73,7 @@ const searchGenrerById = async (id) => {
             }
         } else {
             MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido!';
+
             return MESSAGE.REQUIRED_FIELDS; //400
         }
     } catch (error) {
@@ -80,7 +81,7 @@ const searchGenrerById = async (id) => {
     }
 }
 
-const insertGenrer = async (genrer, contentType) => {
+const insertSex = async (sex, contentType) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -88,28 +89,28 @@ const insertGenrer = async (genrer, contentType) => {
         //Verifica se o tipo de dado enviado é um JSON
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON') {
             //Chama a função que valida os dados
-            let validarDadosGenrer = validarDados(genrer);
-            if(!validarDadosGenrer) {
-                //Chama a função do DAO que insere o gênero no DB
-                let result = await genrerDAO.setInsertGenrer(genrer);
+            let validarDadosSexo = validarDados(sex);
+            if(!validarDadosSexo) {
+                //Chama a função do DAO que insere o sexo no DB
+                let result = await sexDAO.setInsertSex(sex);
 
                 //Verifica se a função do DAO deu certo
                 if(result) {
-                    //Chama a função do DAO que retorna o ID do último gênero do DB
-                    let lastIdGenrer = await genrerDAO.getSelectLastIdGenrer();
+                    //Chama a função do DAO que retorna o ID do último sexo do DB
+                    let lastIdSex = await sexDAO.getSelectLastIdSex();
 
                     //Verifica se a função deu certo
-                    if(lastIdGenrer) {
-                        //Cria o objeto do gênero inserido, com o ID no começo
-                        let genrerInserted = {
-                            "id": lastIdGenrer,
-                            ...genrer
+                    if(lastIdSex) {
+                        //Cria o objeto do sexo inserido, com o ID no começo
+                        let sexInserted = {
+                            "id": lastIdSex,
+                            ...sex
                         }
 
                         MESSAGE.HEADER.status       = MESSAGE.SUCESS_CREATED_ITEM.status;
                         MESSAGE.HEADER.status_code  = MESSAGE.SUCESS_CREATED_ITEM.status_code;
                         MESSAGE.HEADER.message      = MESSAGE.SUCESS_CREATED_ITEM.message;
-                        MESSAGE.HEADER.response     = genrerInserted;
+                        MESSAGE.HEADER.response     = sexInserted;
 
                         return MESSAGE.HEADER; //201
                     } else {
@@ -119,7 +120,7 @@ const insertGenrer = async (genrer, contentType) => {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
                 }
             } else {
-                return validarDadosGenrer;
+                return validarDadosSexo;
             }
 
         } else {
@@ -130,7 +131,7 @@ const insertGenrer = async (genrer, contentType) => {
     }
 }
 
-const updateGenrer = async (genrer, id, contentType) => {
+const updateSex = async (sex, id, contentType) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -138,28 +139,28 @@ const updateGenrer = async (genrer, id, contentType) => {
         //Verifica se o tipo de dado enviado é um JSON
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON') {
             //Chama a função que valida os dados
-            let validarDadosGenrer = validarDados(genrer)
-            if(!validarDadosGenrer) {
+            let validarDadosSex = validarDados(sex)
+            if(!validarDadosSex) {
                 //Chama a função para validar a consistência do ID e verificar se ele existe no DB
-                let validarID = await searchGenrerById(id);
+                let validarID = await searchSexById(id);
 
                 //Verifica se o ID existe no DB
                 if(validarID.status_code == 200) {
-                    //Cria o objeto do gênero com o ID em primeiro
-                    let genrerUpdated = {
+                    //Cria o objeto do sexo com o ID em primeiro
+                    let sexUpdated = {
                         "id": parseInt(id),
-                        ...genrer
+                        ...sex
                     }
                     
-                    //Chama a função do DAO que atualiza um gênero no DB
-                    let result = await genrerDAO.setUpdateGenrer(genrerUpdated);
+                    //Chama a função do DAO que atualiza um sexo no DB
+                    let result = await sexDAO.setUpdateSex(sexUpdated);
 
                     //Verifica se a função deu certo
                     if(result) {
                         MESSAGE.HEADER.status       = MESSAGE.SUCESS_UPDATED_ITEM.status;
                         MESSAGE.HEADER.status_code  = MESSAGE.SUCESS_UPDATED_ITEM.status_code;
                         MESSAGE.HEADER.message      = MESSAGE.SUCESS_UPDATED_ITEM.message;
-                        MESSAGE.HEADER.response     = genrerUpdated;
+                        MESSAGE.HEADER.response     = sexUpdated;
 
                         return MESSAGE.HEADER; //200
                     } else {
@@ -169,7 +170,7 @@ const updateGenrer = async (genrer, id, contentType) => {
                     return validarID; //400 - 404 - 500
                 }
             } else {
-                return validarDadosGenrer;
+                return validarDadosSex;
             }
 
         } else {
@@ -180,20 +181,20 @@ const updateGenrer = async (genrer, id, contentType) => {
     }
 }
 
-const deleteGenrer = async (id) => {
+const deleteSex = async (id) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
-        //Chama a função que busca um gênero por ID para verificar a consistência
-        let validarID = await searchGenrerById(id);
+        //Chama a função que busca um sexo por ID para verificar a consistência
+        let validarID = await searchSexById(id);
 
         if(validarID.status_code == 200) {
             //Preserva o argumento e transforma em inteiro
-            let idGenrer = parseInt(id);
+            let idSex = parseInt(id);
 
-            //Chama a função do DAO que exclui um gênero do DB
-            let result = await genrerDAO.setDeleteGenrer(idGenrer);
+            //Chama a função do DAO que exclui um sexo do DB
+            let result = await sexDAO.setDeleteSex(idSex);
 
             //Verifica se a função deu certo
             if(result) {
@@ -216,16 +217,12 @@ const deleteGenrer = async (id) => {
 }
 
 // ==================== FUNÇÕES CONTROLLER ===================
-const validarDados = (genrer) => {
+const validarDados = (sex) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
-    if(genrer.nome == '' || genrer.nome == null || genrer.nome == undefined || genrer.nome.length > 20) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!';
-
-        return MESSAGE.ERROR_REQUIRED_FIELDS
-    } else if(genrer.descricao == '' || genrer.descricao == null || genrer.descricao == undefined || genrer.descricao.length > 200) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [DESCRICAO] inválido!';
+    if(sex.sexo == '' || sex.sexo == null || sex.sexo == undefined || sex.sexo.length > 20) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [SEXO] inválido!';
 
         return MESSAGE.ERROR_REQUIRED_FIELDS
     } else {
@@ -233,9 +230,9 @@ const validarDados = (genrer) => {
     }
 }
 module.exports = {
-    listGenrer,
-    searchGenrerById,
-    insertGenrer,
-    updateGenrer,
-    deleteGenrer
+    listSex,
+    searchSexById,
+    insertSex,
+    updateSex,
+    deleteSex
 }

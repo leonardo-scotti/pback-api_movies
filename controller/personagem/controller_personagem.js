@@ -17,7 +17,7 @@ const listCharacters = async () => {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
-        //Chama a função do DAO que lista os diretores do DB
+        //Chama a função do DAO que lista os personagens do DB
         let result = await characterDAO.getSelectAllCharacter();
         if (result) {
             //Verifica se há dados no DB
@@ -50,7 +50,7 @@ const searchCharacterById = async (id) => {
     try {
         //Validação do ID
         if (id != '' && id != null && id != undefined && id > 0) {
-            //Chama a função do DAO que busca um Diretor fltrando pelo ID
+            //Chama a função do DAO que busca um personagem fltrando pelo ID
             let result = await characterDAO.getSelectByIdCharacter(id);
             if (result) {
                 if (result.length > 0) {
@@ -82,16 +82,16 @@ const insertCharacter = async (character, contentType) => {
     try {
         //Validação do content-type
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            //Chama a função que valida os dados do objeto diretor
-            let validarDadosDiretor = validarDados(character);
-            if (!validarDadosDiretor) {
-                //Chama a função do DAO que insere um diretor no DB
+            //Chama a função que valida os dados do objeto personagem
+            let validarDadosCharacter = validarDados(character);
+            if (!validarDadosCharacter) {
+                //Chama a função do DAO que insere um personagem no DB
                 let result = await characterDAO.setInsertCharacter(character);
                 if (result) {
                     //Chama a função do DAO que busca o último ID do DB
                     let lastIdCharacter = await characterDAO.getSelectLastIdCharacter();
 
-                    //Cria um objeto do diretor com o ID sendo o primeiro atributo
+                    //Cria um objeto do personagem com o ID sendo o primeiro atributo
                     let characterInserted = {
                         "id": lastIdCharacter,
                         ...character
@@ -107,7 +107,7 @@ const insertCharacter = async (character, contentType) => {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
                 }
             } else {
-                return validarDadosDiretor; //400
+                return validarDadosCharacter; //400
             }
         } else {
             return MESSAGE.ERROR_CONTENT_TYPE; //415
@@ -124,20 +124,20 @@ const updateCharacter = async (character, id, contentType) => {
     try {
         //Validação do content-type
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            //Chama a função que valida os dados do objeto diretor
-            let validarDadosDiretor = validarDados(character);
-            if (!validarDadosDiretor) {
+            //Chama a função que valida os dados do objeto personagem
+            let validarDadosCharacter = validarDados(character);
+            if (!validarDadosCharacter) {
                 //Validação do ID
                 let validarID = await searchCharacterById(id);
                 console.log(validarID);
                 if (validarID.status_code == 200) {
-                    //Cria o objeto do diretor com o ID em primeiro
+                    //Cria o objeto do personagem com o ID em primeiro
                     let characterUpdated = {
                         "id": id,
                         ...character
                     }
 
-                    //Chama a função do DAO que atualiza o diretor no DB
+                    //Chama a função do DAO que atualiza o personagem no DB
                     let result = await characterDAO.setUpdateCharacter(characterUpdated);
                     if (result) {
 
@@ -156,7 +156,7 @@ const updateCharacter = async (character, id, contentType) => {
                     return MESSAGE.ERROR_REQUIRED_FIELDS; //400
                 }
             } else {
-                return validarDadosDiretor; //400
+                return validarDadosCharacter; //400
             }
         } else {
             return MESSAGE.ERROR_CONTENT_TYPE; //415
@@ -171,7 +171,7 @@ const deleteCharacter = async (id) => {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
-        //Chama a função do DAO que deleta um diretor do DB
+        //Chama a função do DAO que deleta um personagem do DB
         let result = await characterDAO.setDeleteCharacter(id);
         if (result) {
             //Monta a mensagem

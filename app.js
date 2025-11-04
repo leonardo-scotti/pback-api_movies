@@ -25,6 +25,9 @@ const directorRoutes = require('./routes/diretor/routes_diretor.js');
 
 //PERSONAGEM
 const characterRoutes = require('./routes/personagem/routes_personagem.js');
+
+//SEXO
+const sexRoutes = require('./routes/sexo/routes_sexo.js');
 // =====================================
 
 //Cria um objeto especialista no formato JSON para receber os dados no body (POST e PUT)
@@ -60,6 +63,9 @@ app.use('/v1/locadora/diretor', cors(), bodyParserJSON, directorRoutes);
 
 //PERSONAGEM
 app.use('/v1/locadora/personagem', cors(), bodyParserJSON, characterRoutes);
+
+//SEXO
+app.use('/v1/locadora/sexo', cors(), bodyParserJSON, sexRoutes);
 // =============================================================
 
 

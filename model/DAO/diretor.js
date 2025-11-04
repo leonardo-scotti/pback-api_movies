@@ -11,7 +11,7 @@ const { PrismaClient } = require('../../generated/prisma');
 //Cria um objeto do @prisma/client para manipular os scripts SQL
 const prisma = new PrismaClient();
 
-//Retorna todos os Gêneros no DB
+//Retorna todos os Diretores no DB
 const getSelectAllDirector = async () => {
     try {
         //Script SQL
@@ -32,7 +32,7 @@ const getSelectAllDirector = async () => {
     }
 };
 
-//Retorna um filme filtrando pelo ID do DB
+//Retorna um diretor filtrando pelo ID do DB
 const getSelectByIdDirector = async (id) => {
     try {
         //Script SQL
@@ -73,7 +73,7 @@ const getSelectLastIdDirector = async () => {
     }
 }
 
-//Insere um filme no DB
+//Insere um diretor no DB
 const setInsertDirector = async (director) => {
     try {
         let sql = `INSERT INTO tbl_diretor(nome, data_nascimento, altura, peso, patrimonio_liquido)
@@ -97,7 +97,7 @@ const setInsertDirector = async (director) => {
     };
 };
 
-//Atualiza um filme existente no DB filtrando pelo ID
+//Atualiza um diretor existente no DB filtrando pelo ID
 const setUpdateDirector = async (director) => {
     try {
         let sql = `UPDATE tbl_diretor SET
@@ -120,7 +120,7 @@ const setUpdateDirector = async (director) => {
     };
 };
 
-//Deleta um filme existente no DB filtrando pelo ID
+//Deleta um diretor existente no DB filtrando pelo ID
 const setDeleteDirector = async (id) => {
     try {
         let sql = `DELETE FROM tbl_diretor WHERE id_diretor = ${id}`;

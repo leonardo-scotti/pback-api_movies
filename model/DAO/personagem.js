@@ -11,7 +11,7 @@ const { PrismaClient } = require('../../generated/prisma');
 //Cria um objeto do @prisma/client para manipular os scripts SQL
 const prisma = new PrismaClient();
 
-//Retorna todos os Gêneros no DB
+//Retorna todos os Personagens no DB
 const getSelectAllCharacter = async () => {
     try {
         //Script SQL
@@ -32,7 +32,7 @@ const getSelectAllCharacter = async () => {
     }
 };
 
-//Retorna um filme filtrando pelo ID do DB
+//Retorna um personagem filtrando pelo ID do DB
 const getSelectByIdCharacter = async (id) => {
     try {
         //Script SQL
@@ -73,7 +73,7 @@ const getSelectLastIdCharacter = async () => {
     }
 }
 
-//Insere um filme no DB
+//Insere um personagem no DB
 const setInsertCharacter = async (character) => {
     try {
         let sql = `INSERT INTO tbl_personagem(nome, data_nascimento, raca, descricao, altura, peso)
@@ -98,7 +98,7 @@ const setInsertCharacter = async (character) => {
     };
 };
 
-//Atualiza um filme existente no DB filtrando pelo ID
+//Atualiza um personagem existente no DB filtrando pelo ID
 const setUpdateCharacter = async (character) => {
     try {
         let sql = `UPDATE tbl_personagem SET
@@ -109,7 +109,7 @@ const setUpdateCharacter = async (character) => {
                         altura              =   '${character.altura}',
                         peso                =   '${character.peso}'
                     WHERE id_personagem = ${character.id};`;
-                    
+
         let result = await prisma.$executeRawUnsafe(sql);
 
         if (result) {
@@ -122,7 +122,7 @@ const setUpdateCharacter = async (character) => {
     };
 };
 
-//Deleta um filme existente no DB filtrando pelo ID
+//Deleta um personagem existente no DB filtrando pelo ID
 const setDeleteCharacter = async (id) => {
     try {
         let sql = `DELETE FROM tbl_personagem WHERE id_personagem = ${id}`;
