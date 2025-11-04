@@ -20,7 +20,7 @@ const listLanguage = async () => {
     try {
         //Chama a função do DAO que lista os idiomas
         let result = await languageDAO.getSelectAllLanguage();
-
+        
         //Verifica se a função deu certo
         if (result) {
             //Verifica se há dados no DB

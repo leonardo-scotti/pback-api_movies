@@ -11,22 +11,18 @@ const cors       = require('cors');
 const bodyParser = require('body-parser');
 
 // ========== IMPORT'S ROUTES ==========
+//Filmes
 const moviesRoutes = require('./routes/filme/routes_filme.js');
 
-// ========== IMPORT'S CONTROLLER'S ==========
-//Controller Filme
-const controllerFilme = require('./controller/filme/controller_filme.js');
+//Gênero
+const genrersRoutes = require('./routes/genero/routes_genero.js');
 
-//Controller Gênero
-const controllerGenrer = require('./controller/genero/controller_genero.js');
+//Idioma
+const languageRoutes = require('./routes/idioma/routes_idioma.js');
 
-//Controller Idioma
-const controllerLanguage = require('./controller/idioma/controller_idioma.js');
-
-//Controller Diretor
-const controllerDirector = require('./controller/diretor/controller_diretor.js');
-
-// ===========================================
+//Diretor
+const directorRoutes = require('./routes/diretor/routes_diretor.js');
+// =====================================
 
 //Cria um objeto especialista no formato JSON para receber os dados no body (POST e PUT)
 const bodyParserJSON = bodyParser.json();
@@ -46,167 +42,20 @@ app.use((request, response, next) => {
     next();
 })
 
+// ======================== ROTAS ==============================
+//FILME
 app.use('/v1/locadora/filme', cors(), bodyParserJSON, moviesRoutes);
 
-// ========== ENDPOINTS CRUD FILME ==========
-//EndPoint que lista todos os Gêneros
-app.get('/v1/locadora/genero', cors(), async (request, response) => {
-    let genrers = await controllerGenrer.listGenrer()
+//GÊNERO
+app.use('/v1/locadora/genero', cors(), bodyParserJSON, genrersRoutes);
 
-    response.status(genrers.status_code);
-    response.json(genrers);
-})
+//IDIOMA
+app.use('/v1/locadora/idioma', cors(), bodyParserJSON, languageRoutes);
 
-//EndPoint que retorna um Gênero filtrando por ID
-app.get('/v1/locadora/genero/:id', cors(), async (request, response) => {
-    let idGenrer = request.params.id
+//DIRETOR
+app.use('/v1/locadora/diretor', cors(), bodyParserJSON, directorRoutes);
+// =============================================================
 
-    let genrer = await controllerGenrer.searchGenrerById(idGenrer);
-
-    response.status(genrer.status_code);
-    response.json(genrer);
-})
-
-//EndPoint que adiciona um Gênero no DB
-app.post('/v1/locadora/genero', cors(), bodyParserJSON, async (request, response) => {
-    let genrerBody = request.body;
-    let contentType = request.headers['content-type'];
-
-    let genrerInserted = await controllerGenrer.insertGenrer(genrerBody, contentType);
-
-    response.status(genrerInserted.status_code);
-    response.json(genrerInserted);
-})
-
-//EndPoint que atualiza um Gênero já existente no DB
-app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async (request, response) => {
-    let idGenrer = request.params.id
-    let genrerBody = request.body;
-    let contentType = request.headers['content-type'];
-
-    let genrerUpdated = await controllerGenrer.updateGenrer(genrerBody, idGenrer, contentType);
-
-    response.status(genrerUpdated.status_code);
-    response.json(genrerUpdated);
-})
-
-//EndPoint que deleta um Gênero no DB
-app.delete('/v1/locadora/genero/:id', cors(), async (request, response) => {
-    let idGenrer = request.params.id;
-
-    let genrerDeleted = await controllerGenrer.deleteGenrer(idGenrer);
-
-    response.status(genrerDeleted.status_code);
-    response.json(genrerDeleted);
-})
-// ===========================================
-
-// ========== ENDPOINTS CRUD IDIOMA ==========
-//EndPoint que lista tudo do DB
-app.get('/v1/locadora/idioma', cors(), async (request, response) => {
-    let languages = await controllerLanguage.listLanguage();
-
-    response.status(languages.status_code);
-    response.json(languages);
-})
-
-//EndPoint que retorna a linguagem por ID
-app.get('/v1/locadora/idioma/:id', cors(), async (request, response) => {
-    let idLanguage = request.params.id;
-
-    let language = await controllerLanguage.searchLanguageById(idLanguage);
-
-    response.status(language.status_code);
-    response.json(language);
-})
-
-//EndPoint que insere uma linguagem no DB
-app.post('/v1/locadora/idioma', cors(), bodyParserJSON, async (request, response) => {
-    let languageBody = request.body;
-    let contentType = request.headers['content-type'];
-
-    let languageInserted = await controllerLanguage.insertLanguage(languageBody, contentType);
-    console.log(languageInserted)
-
-    response.status(languageInserted.status_code);
-    response.json(languageInserted);
-})
-
-//EndPoint que atualiza uma lingaugem no DB
-app.put('/v1/locadora/idioma/:id', cors(), bodyParserJSON, async (request, response) => {
-    let idLanguage = request.params.id;
-    let languageBody = request.body
-    let contentType = request.headers['content-type'];
-
-    let languageUpdated = await controllerLanguage.updateLanguage(languageBody, idLanguage, contentType);
-
-    response.status(languageUpdated.status_code);
-    response.json(languageUpdated);
-})
-
-//EndPoint que deleta uma linguagem no DB
-app.delete('/v1/locadora/idioma/:id', cors(), async (request, response) => {
-    let idLanguage = request.params.id;
-
-    let languageDeleted = await controllerLanguage.deleteLanguage(idLanguage);
-
-    response.status(languageDeleted.status_code);
-    response.json(languageDeleted);
-})
-// ===========================================
-
-// ========== ENDPOINTS CRUD DIRETOR ==========
-//EndPoint que retorna todos os diretores do DB
-app.get('/v1/locadora/diretor', cors(), async (request, response) => {
-    let directors = await controllerDirector.listDirector();
-
-    response.status(directors.status_code);
-    response.json(directors);
-})
-
-//EndPoint que retorna um diretor filtrando pelo ID
-app.get('/v1/locadora/diretor/:id', cors(), async (request, response) => {
-    let idDirector = request.params.id;
-
-    let director = await controllerDirector.searchDirectorById(idDirector);
-
-    response.status(director.status_code);
-    response.json(director);
-})
-
-//EndPoint que  insere um diretor no DB
-app.post('/v1/locadora/diretor', cors(), bodyParserJSON, async (request, response) => {
-    let directorBody = request.body;
-    let contentType = request.headers['content-type'];
-
-    let directorInserted = await controllerDirector.insertDirector(directorBody, contentType);
-
-    response.status(directorInserted.status_code);
-    response.json(directorInserted);
-})
-
-//EndPoint que atualiza um diretor no DB
-app.put('/v1/locadora/diretor/:id', cors(), bodyParserJSON, async (request, response) => {
-    let idDirector = request.params.id;
-    let directorBody = request.body;
-    let contentType = request.headers['content-type'];
-
-    let directorUpdated = await controllerDirector.updateDirector(directorBody, idDirector, contentType);
-    
-    response.status(directorUpdated.status_code);
-    response.json(directorUpdated);
-})
-
-//EndPoint que deleta um diretor do DB
-app.delete('/v1/locadora/diretor/:id', cors(), async (request, response) => {
-    let idDirector = request.params.id;
-
-    let directorDeleted = await controllerDirector.deleteDirector(idDirector);
-    
-    response.status(directorDeleted.status_code);
-    response.json(directorDeleted);
-})
-// ============================================
 
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')

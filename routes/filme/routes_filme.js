@@ -67,3 +67,4 @@ router.delete('/:id', async (request, response) => {
     response.json(deletedFilme);
 })
 // ==========================================
+module.exports = router
