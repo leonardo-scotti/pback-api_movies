@@ -56,6 +56,21 @@ WHERE id = id;
 
 SELECT id FROM tbl_filme ORDER BY id DESC LIMIT 1;
 
+
+CREATE TABLE tbl_filme_genero(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    filme_id INT NOT NULL,
+    genero_id INT NOT NULL,
+
+    constraint FK_FILME_FILME_GENERO    # Nome da relação
+    foreign key (filme_id)              # Qual a chave estrangeira
+    references tbl_filme(id),            # De onde vem a FK
+
+    constraint FK_GENERO_FILME_GENERO
+    foreign key (genero_id)
+    references tbl_genero(id_genero)
+);
+
 -- ========== GÊNERO ==========
 CREATE TABLE tbl_genero(
 	id_genero INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
