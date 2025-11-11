@@ -32,6 +32,17 @@ const listarFilmes = async () => {
             if (result.length > 0) {
                 let amount = result.length;
 
+                //processamento para adicionar os gêneros em cada filme
+                for(filme of result) {
+                    let genrersFilm = await controllerFilmGenrer.listGenrersByIdFilm(filme.id);
+
+                    if(genrersFilm.status_code == 200){
+                        filme.genrer = genrersFilm.response.genrers;
+                    } else {
+                        filme.genrer = []
+                    }
+                }
+                
                 MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status;
                 MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code;
                 MESSAGE.HEADER.response.movies_amount = amount;
@@ -46,6 +57,7 @@ const listarFilmes = async () => {
         };
 
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -66,6 +78,10 @@ const buscarFilmeId = async (id) => {
             if (result) {
 
                 if (result.length > 0) {
+                    let genresFilme = await controllerFilmGenrer.listGenrersByIdFilm(result[0].id);
+                    
+                    result[0].genrers = genresFilme.response.genrers
+
                     MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code;
                     MESSAGE.HEADER.response.movie = result;
@@ -109,20 +125,35 @@ const inserirFilme = async (filme, contentType) => {
                         //
                         //Repetição para pegar cada gênero e enviar para
                         //o DAO
-                        filme.genrer.forEach(async (genrer) => {
+                        //filme.genrer.forEach(async (genrer) => {
+                        for(genrer of filme.genrer){
                             let filmGenrer = {filme_id: lastIdFilm, genero_id: genrer.id};
                             
                             let resultFilmGenrer = await controllerFilmGenrer.insertFilmGenrer(filmGenrer, contentType);
-                        });
+
+                            if(resultFilmGenrer.status_code != 201){
+                                return MESSAGE.ERROR_RELATION_TABLE; //200, porém com problemas na tabela de relação
+                            }
+                        };
+
+                        MESSAGE.HEADER.status       = MESSAGE.SUCESS_CREATED_ITEM.status;
+                        MESSAGE.HEADER.status_code  = MESSAGE.SUCESS_CREATED_ITEM.status_code;
+                        MESSAGE.HEADER.message      = MESSAGE.SUCESS_CREATED_ITEM.message;
+
+                        //Processamento para trazer dados dos generos cadastrados ma tabela de ralação
+                        delete filme.genrer;
+
+                        //Pesquisa no DB qais od generos e os seus dados que foram inseridos na tabela de relação
+                        let resulGenerosFilme = await controllerFilmGenrer.listGenrersByIdFilm(lastIdFilm);
+                        
+                        //Adiciona novamente o atributo genero com todas as informações do genero
+                        filme.genrer = resulGenerosFilme.response.genrers;
 
                         filmeInserido = {
                             "id": lastIdFilm,
                             ...filme
                         }
 
-                        MESSAGE.HEADER.status       = MESSAGE.SUCESS_CREATED_ITEM.status;
-                        MESSAGE.HEADER.status_code  = MESSAGE.SUCESS_CREATED_ITEM.status_code;
-                        MESSAGE.HEADER.message      = MESSAGE.SUCESS_CREATED_ITEM.message;
                         MESSAGE.HEADER.response     = filmeInserido;
 
                         return MESSAGE.HEADER; //201
@@ -140,6 +171,7 @@ const inserirFilme = async (filme, contentType) => {
 
         }
     } catch (error) {
+        // console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -216,7 +248,7 @@ const excluirFilme = async (id) => {
             return validarID; //400 - 404 - 500
         }
     } catch (error) {
-        console.log(error)
+        //console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };

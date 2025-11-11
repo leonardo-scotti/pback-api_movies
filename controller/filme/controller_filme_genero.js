@@ -39,7 +39,7 @@ const listFilmGenrer = async () => {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
         }
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500    
     }
 }
@@ -95,7 +95,7 @@ const listGenrersByIdFilm = async (idFilm) => {
 
             //Guarda o resultado da função do DAO que filtra um Gênero por ID
             let result = await filmGenrerDAO.getSelectGenrersByIdFilm(idInt);
-
+            
             //Verifica se a função do DAO deu certo
             if(result) {
                 //Verifica se há o filme

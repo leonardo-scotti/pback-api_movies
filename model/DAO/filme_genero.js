@@ -82,7 +82,7 @@ const getSelectGenrersByIdFilm = async (idFilm) => {
         let sql = `select tbl_genero.id_genero, tbl_genero.nome
                      from tbl_filme
                             join tbl_filme_genero
-                                on tbl_filme.id = tbl_filme_genero.filme.id
+                                on tbl_filme.id = tbl_filme_genero.filme_id
                             join tbl_genero
                                 on tbl_genero.id_genero = tbl_filme_genero.genero_id 
                      where tbl_filme.id = ${idFilm}`;
@@ -112,7 +112,7 @@ const getSelectFilmsByIdGenrer = async (idGenrer) => {
                                 on tbl_filme.id = tbl_filme_genero.filme.id
                             join tbl_genero
                                 on tbl_genero.id_genero = tbl_filme_genero.genero_id 
-                     where tbl_genero.id = ${idFilm}`;
+                     where tbl_genero.id = ${idGenrer}`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);

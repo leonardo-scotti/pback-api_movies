@@ -21,6 +21,12 @@ const HEADER = {
 /*========================================================================================= */
 
 /*============================== MENSAGENS DE ERRO DO PROJETO ==============================*/
+const ERROR_RELATION_TABLE = {
+    status: false,
+    status_code: 200,
+    message: 'A requisição foi bem sucedida na criaçõa do item principal, porém ouveram problemas na tabela de relacionamento!'
+}
+
 const ERROR_NOT_FOUND = {
     status: false,
     status_code: 404,
@@ -85,6 +91,7 @@ module.exports = {
     SUCESS_CREATED_ITEM,
     SUCESS_UPDATED_ITEM,
     SUCESS_DELETED_ITEM,
+    ERROR_RELATION_TABLE,
     ERROR_NOT_FOUND,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_INTERNAL_SERVER_CONTROLLER,
