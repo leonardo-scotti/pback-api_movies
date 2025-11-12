@@ -71,6 +71,18 @@ CREATE TABLE tbl_filme_genero(
     references tbl_genero(id_genero)
 );
 
+CREATE TABLE tbl_filme_diretor(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    filme_id INT NOT NULL,
+    diretor_id INT NOT NULL,
+
+    CONSTRAINT FK_FILME_FILME_DIRETOR
+    FOREIGN KEY (filme_id) REFERENCES tbl_filme(id),
+
+    CONSTRAINT FK_DIRETOR_FILME_DIRETOR
+    FOREIGN KEY (diretor_id) REFERENCES tbl_diretor(id_diretor)
+);
+
 -- ========== GÊNERO ==========
 CREATE TABLE tbl_genero(
 	id_genero INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -158,3 +170,23 @@ UPDATE tbl_diretor SET
     peso                =   'peso'
     patrimonio_liquido  =   'patrimonio_lilquido'
 WHERE id = id;
+
+-- ==================== TRIGGERS ======================
+DELIMITER $$
+CREATE TRIGGER trg_quebrar_constraint_filme_delete
+BEFORE DELETE ON tbl_filme
+FOR EACH ROW
+BEGIN
+    DELETE FROM tbl_filme_genero WHERE filme_id = OLD.id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_atualizar_filme_genero_update
+BEFORE UPDATE ON tbl_filme
+FOR EACH ROW
+BEGIN
+    DELETE FROM tbl_filme_genero WHERE filme_id = OLD.id;
+END$$
+
+DELIMITER ;

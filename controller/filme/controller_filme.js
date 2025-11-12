@@ -80,6 +80,7 @@ const buscarFilmeId = async (id) => {
                 if (result.length > 0) {
                     let genresFilme = await controllerFilmGenrer.listGenrersByIdFilm(result[0].id);
                     
+                    if(genresFilme.status_code == 200)
                     result[0].genrers = genresFilme.response.genrers
 
                     MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status;
@@ -99,6 +100,7 @@ const buscarFilmeId = async (id) => {
             return MESSAGE.ERROR_REQUIRED_FIELDS; //400
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -122,7 +124,7 @@ const inserirFilme = async (filme, contentType) => {
                     if (lastIdFilm) {
                         //Processamento para inserir dados na tabela de 
                         //relação entre filme e gênero
-                        //
+                        
                         //Repetição para pegar cada gênero e enviar para
                         //o DAO
                         //filme.genrer.forEach(async (genrer) => {
@@ -143,7 +145,7 @@ const inserirFilme = async (filme, contentType) => {
                         //Processamento para trazer dados dos generos cadastrados ma tabela de ralação
                         delete filme.genrer;
 
-                        //Pesquisa no DB qais od generos e os seus dados que foram inseridos na tabela de relação
+                        //Pesquisa no DB quais os generos e os seus dados que foram inseridos na tabela de relação
                         let resulGenerosFilme = await controllerFilmGenrer.listGenrersByIdFilm(lastIdFilm);
                         
                         //Adiciona novamente o atributo genero com todas as informações do genero
@@ -198,10 +200,37 @@ const atualizarFilme = async (filme, id, contentType) => {
                     //Chama a função do DAO para atualizar um filme
                     let result = await filmeDAO.setUpdateFilms(filme);
                     if (result) {
+
+                        for(genero of filme.genrers) {
+                            let filmeGenero = {filme_id: filme.id, genero_id: genero.id};
+
+                            let resultGeneroFilme = await controllerFilmGenrer.insertFilmGenrer(filmeGenero, contentType)
+                            
+                            if(resultGeneroFilme.status_code != 201){
+                                return MESSAGE.ERROR_RELATION_TABLE;
+                            }
+                        }
+
                         MESSAGE.HEADER.status = MESSAGE.SUCESS_UPDATED_ITEM.status;
                         MESSAGE.HEADER.status_code = MESSAGE.SUCESS_UPDATED_ITEM.status_code;
                         MESSAGE.HEADER.message = MESSAGE.SUCESS_UPDATED_ITEM.message;
-                        MESSAGE.HEADER.response = filme;
+
+                        //Processamento para trazer dados dos generos cadastrados ma tabela de ralação
+                        delete filme.genrers;
+
+                        //Pesquisa no DB quais os generos e os seus dados que foram inseridos na tabela de relação
+                        let resulGenerosFilme = await controllerFilmGenrer.listGenrersByIdFilm(filme.id);
+                        
+                        //Adiciona novamente o atributo genero com todas as informações do genero
+                        filme.genrer = resulGenerosFilme.response.genrers;
+
+                        filmeAtualizado = {
+                            "id": filme.id,
+                            ...filme
+                        }
+
+                        MESSAGE.HEADER.response = filmeAtualizado;
+                        // MESSAGE.HEADER.response = filme;
 
                         return MESSAGE.HEADER; //201
                     } else {
@@ -218,6 +247,7 @@ const atualizarFilme = async (filme, id, contentType) => {
 
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };

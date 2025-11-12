@@ -9,6 +9,12 @@
 //Import do arquivo DAO para manipular o CRUD no DB
 const directorDAO = require('../../model/DAO/diretor.js');
 
+//Import da controller filmeDiretor
+const controllerFilmDirector = require('../filme/controller_filme_diretor.js');
+
+//Import da controller filme
+const controllerFilme = require('../filme/controller_filme.js');
+
 //Import do arquivo que padroniza as mensagens
 const MESSAGE_DEFAULT = require('../module/config_messages.js')
 
@@ -19,11 +25,28 @@ const listDirector = async () => {
     try {
         //Chama a função do DAO que lista os diretores do DB
         let result = await directorDAO.getSelectAllDirector();
+
         if (result) {
             //Verifica se há dados no DB
             if (result.length > 0) {
                 //Guarda a quantidade em uma variável
                 let amount = result.length;
+
+                //processamento para adicionar os gêneros em cada filme
+                for (director of result) {
+                    let directorFilm = await controllerFilmDirector.listFilmsByIdDirector(director.id_diretor);
+
+                    director.movies = []
+                    if (directorFilm.status_code == 200) {
+                        for (filme of directorFilm.response.movies) {
+                            let filmeGenero = await controllerFilme.buscarFilmeId(filme.id)
+
+                            director.movies.push(filmeGenero.response.movie[0]);
+                        }
+                    } else {
+                        director.movies = []
+                    }
+                }
 
                 //Monta a mensagem
                 MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status;
@@ -39,6 +62,7 @@ const listDirector = async () => {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -54,9 +78,21 @@ const searchDirectorById = async (id) => {
             let result = await directorDAO.getSelectByIdDirector(id);
             if (result) {
                 if (result.length > 0) {
+                    let directorFilm = await controllerFilmDirector.listFilmsByIdDirector(result[0].id_diretor);
+                    if (directorFilm.status_code == 200) {
+                        result[0].movies = []
+                        for (filme of directorFilm.response.movies) {
+                            let filmeGenero = await controllerFilme.buscarFilmeId(filme.id)
+
+                            result[0].movies.push(filmeGenero.response.movie[0]);
+                        }
+                    } else {
+                        director.movies = []
+                    }
+
                     MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response = result;
+                    MESSAGE.HEADER.response.director = result;
 
                     return MESSAGE.HEADER;
                 } else {
@@ -71,6 +107,7 @@ const searchDirectorById = async (id) => {
             return MESSAGE.ERROR_REQUIRED_FIELDS; //400
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -91,18 +128,38 @@ const insertDirector = async (director, contentType) => {
                     //Chama a função do DAO que busca o último ID do DB
                     let lastIdDirector = await directorDAO.getSelectLastIdDirector();
 
-                    //Cria um objeto do diretor com o ID sendo o primeiro atributo
-                    let directorInserted = {
-                        "id": lastIdDirector,
-                        ...director
+                    if (lastIdDirector) {
+                        //Processamento para inserir dados na tabela de 
+                        //relação entre filme e gênero
+                        
+                        //Repetição para pegar cada gênero e enviar para
+                        //o DAO
+                        //filme.genrer.forEach(async (genrer) => {
+                        for(genrer of filme.genrer){
+                            let filmGenrer = {filme_id: lastIdFilm, genero_id: genrer.id};
+                            
+                            let resultFilmGenrer = await controllerFilmGenrer.insertFilmGenrer(filmGenrer, contentType);
+
+                            if(resultFilmGenrer.status_code != 201){
+                                return MESSAGE.ERROR_RELATION_TABLE; //200, porém com problemas na tabela de relação
+                            }
+                        };
+                        
+                        //Cria um objeto do diretor com o ID sendo o primeiro atributo
+                        let directorInserted = {
+                            "id": lastIdDirector,
+                            ...director
+                        }
+
+                        MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status;
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code;
+                        MESSAGE.HEADER.message = MESSAGE.SUCESS_CREATED_ITEM.message;
+                        MESSAGE.HEADER.response = directorInserted;
+
+                        return MESSAGE.HEADER;
+                    } else {
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
                     }
-
-                    MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status;
-                    MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code;
-                    MESSAGE.HEADER.message = MESSAGE.SUCESS_CREATED_ITEM.message;
-                    MESSAGE.HEADER.response = directorInserted;
-
-                    return MESSAGE.HEADER;
                 } else {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
                 }
