@@ -86,7 +86,8 @@ CREATE TABLE tbl_filme_diretor(
 -- ========== GÊNERO ==========
 CREATE TABLE tbl_genero(
 	id_genero INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(20) NOT NULL
+	nome VARCHAR(20) NOT NULL,
+    descricao VARCHAR(200) NOT NULL
 );
 
 INSERT INTO tbl_genero(nome)
