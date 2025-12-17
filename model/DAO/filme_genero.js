@@ -136,8 +136,8 @@ const setInsertFilmGenrer = async (filmGenrer) => {
                     VALUES (
                         ${filmGenrer.filme_id},
                         ${filmGenrer.genero_id}
-                    )`;
-
+                    );`;
+        console.log(sql)
         let result = await prisma.$executeRawUnsafe(sql);
 
         if (result) {
@@ -146,6 +146,7 @@ const setInsertFilmGenrer = async (filmGenrer) => {
             return false;
         }
     } catch (error) {
+        console.log(error)
         return false;
     };
 };
@@ -179,7 +180,7 @@ const setDeleteFilmGenrer = async (id) => {
 
         if (result)
             return true;
-         else 
+        else
             return false;
     } catch (error) {
         return false;

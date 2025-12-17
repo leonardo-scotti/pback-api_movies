@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS db_locadora_filme_ds2t_25_2;
 CREATE DATABASE db_locadora_filme_ds2t_25_2;
 
 USE db_locadora_filme_ds2t_25_2;
@@ -70,6 +71,12 @@ CREATE TABLE tbl_filme_genero(
     foreign key (genero_id)
     references tbl_genero(id_genero)
 );
+
+INSERT INTO tbl_filme_genero(filme_id, genero_id)
+                    VALUES (
+                        1,
+                        1
+                    );
 
 CREATE TABLE tbl_filme_diretor(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
