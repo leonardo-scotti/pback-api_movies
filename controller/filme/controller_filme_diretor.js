@@ -7,6 +7,7 @@
  ******************************************************************************************/
 
 //Import do arquivo DAO para manipular o CRUD no DB
+//const filmeDirectorDAO = require('../../model/DAO/filme_diretor.js');
 const filmeDirectorDAO = require('../../model/DAO/filme_diretor.js');
 
 const controllerFilmGenrer = require('./controller_filme_genero.js');
@@ -183,8 +184,8 @@ const insertFilmDirector = async (filmDirector, contentType) => {
             let validarDadosFilmDirector = validarDados(filmDirector);
             if(!validarDadosFilmDirector) {
                 //Chama a função do DAO que insere o gênero no DB
-                let result = await filmeDirectorDAO.setInsertFilmGenrer(filmDirector);
-
+                let result = await filmeDirectorDAO.setInsertFilmDirector(filmDirector);
+                console.log(result)
                 //Verifica se a função do DAO deu certo
                 if(result) {
                     //Chama a função do DAO que retorna o ID do último gênero do DB
@@ -218,6 +219,7 @@ const insertFilmDirector = async (filmDirector, contentType) => {
             return MESSAGE.ERROR_CONTENT_TYPE; //415
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 }

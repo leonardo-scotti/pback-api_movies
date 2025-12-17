@@ -65,11 +65,13 @@ CREATE TABLE tbl_filme_genero(
 
     constraint FK_FILME_FILME_GENERO    # Nome da relação
     foreign key (filme_id)              # Qual a chave estrangeira
-    references tbl_filme(id),            # De onde vem a FK
+    references tbl_filme(id)
+    ON DELETE CASCADE,            # De onde vem a FK
 
     constraint FK_GENERO_FILME_GENERO
     foreign key (genero_id)
     references tbl_genero(id_genero)
+    ON DELETE CASCADE
 );
 
 INSERT INTO tbl_filme_genero(filme_id, genero_id)
@@ -84,10 +86,12 @@ CREATE TABLE tbl_filme_diretor(
     diretor_id INT NOT NULL,
 
     CONSTRAINT FK_FILME_FILME_DIRETOR
-    FOREIGN KEY (filme_id) REFERENCES tbl_filme(id),
+    FOREIGN KEY (filme_id) REFERENCES tbl_filme(id)
+    ON DELETE CASCADE,
 
     CONSTRAINT FK_DIRETOR_FILME_DIRETOR
     FOREIGN KEY (diretor_id) REFERENCES tbl_diretor(id_diretor)
+    ON DELETE CASCADE
 );
 
 -- ========== GÊNERO ==========

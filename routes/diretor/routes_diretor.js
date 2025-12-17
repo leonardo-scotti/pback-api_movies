@@ -40,7 +40,7 @@ router.post('/', async (request, response) => {
     let contentType = request.headers['content-type'];
 
     let directorInserted = await controllerDirector.insertDirector(directorBody, contentType);
-
+    
     response.status(directorInserted.status_code);
     response.json(directorInserted);
 })

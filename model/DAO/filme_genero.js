@@ -79,7 +79,7 @@ const getSelectLastId = async () => {
 const getSelectGenrersByIdFilm = async (idFilm) => {
     try {
         //Script SQL
-        let sql = `select tbl_genero.id_genero, tbl_genero.nome
+        let sql = `select tbl_genero.*
                      from tbl_filme
                             join tbl_filme_genero
                                 on tbl_filme.id = tbl_filme_genero.filme_id
@@ -137,7 +137,7 @@ const setInsertFilmGenrer = async (filmGenrer) => {
                         ${filmGenrer.filme_id},
                         ${filmGenrer.genero_id}
                     );`;
-        console.log(sql)
+
         let result = await prisma.$executeRawUnsafe(sql);
 
         if (result) {

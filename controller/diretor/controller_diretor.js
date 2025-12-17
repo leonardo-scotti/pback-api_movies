@@ -62,7 +62,6 @@ const listDirector = async () => {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
         }
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -78,6 +77,7 @@ const searchDirectorById = async (id) => {
             let result = await directorDAO.getSelectByIdDirector(id);
             if (result) {
                 if (result.length > 0) {
+
                     let directorFilm = await controllerFilmDirector.listFilmsByIdDirector(result[0].id_diretor);
                     if (directorFilm.status_code == 200) {
                         result[0].movies = []
@@ -107,7 +107,6 @@ const searchDirectorById = async (id) => {
             return MESSAGE.ERROR_REQUIRED_FIELDS; //400
         }
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -129,21 +128,6 @@ const insertDirector = async (director, contentType) => {
                     let lastIdDirector = await directorDAO.getSelectLastIdDirector();
 
                     if (lastIdDirector) {
-                        //Processamento para inserir dados na tabela de 
-                        //relação entre filme e gênero
-                        
-                        //Repetição para pegar cada gênero e enviar para
-                        //o DAO
-                        //filme.genrer.forEach(async (genrer) => {
-                        for(genrer of filme.genrer){
-                            let filmGenrer = {filme_id: lastIdFilm, genero_id: genrer.id};
-                            
-                            let resultFilmGenrer = await controllerFilmGenrer.insertFilmGenrer(filmGenrer, contentType);
-
-                            if(resultFilmGenrer.status_code != 201){
-                                return MESSAGE.ERROR_RELATION_TABLE; //200, porém com problemas na tabela de relação
-                            }
-                        };
                         
                         //Cria um objeto do diretor com o ID sendo o primeiro atributo
                         let directorInserted = {

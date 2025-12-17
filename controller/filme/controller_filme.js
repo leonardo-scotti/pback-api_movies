@@ -12,8 +12,11 @@ const filmeDAO = require('../../model/DAO/filme.js');
 //Import da controller da tabela filme_genero
 const controllerFilmGenrer = require('./controller_filme_genero.js');
 
+//Import da controller_filme_diretor
+const controllerFilmDirector = require('./controller_filme_diretor.js');
+
 //Import do arquivo que padroniza as mensagens
-const MESSAGE_DEFAULT = require('../module/config_messages.js')
+const MESSAGE_DEFAULT = require('../module/config_messages.js');
 
 
 //=========================== FUNÇÕES C.R.U.D ===========================
@@ -40,6 +43,14 @@ const listarFilmes = async () => {
                         filme.genrer = genrersFilm.response.genrers;
                     } else {
                         filme.genrer = []
+                    }
+
+                    let directorsFIlm = await controllerFilmDirector.listDirectorsByIdFilm(filme.id)
+                    
+                    if(directorsFIlm.status_code == 200) {
+                        filme.director = directorsFIlm.response.directors
+                    } else {
+                        filme.director = []
                     }
                 }
 
@@ -130,13 +141,23 @@ const inserirFilme = async (filme, contentType) => {
                         //filme.genrer.forEach(async (genrer) => {
                         for (genrer of filme.genrer) {
                             let filmGenrer = { filme_id: lastIdFilm, genero_id: genrer.id };
-                            console.log(filmGenrer)
+                            
                             let resultFilmGenrer = await controllerFilmGenrer.insertFilmGenrer(filmGenrer, contentType);
-                            console.log(resultFilmGenrer)
+                            
                             if (resultFilmGenrer.status_code != 201) {
                                 return MESSAGE.ERROR_RELATION_TABLE; //200, porém com problemas na tabela de relação
                             }
                         };
+
+                        for (director of filme.director) {
+                            let filmDirector = { filme_id: lastIdFilm, diretor_id: director.diretor_id}
+
+                            let resultFilmDirector = await controllerFilmDirector.insertFilmDirector(filmDirector, contentType);
+                            
+                            if (resultFilmDirector.status_code != 201) {
+                                return MESSAGE.ERROR_RELATION_TABLE; //200, porém com problemas na tabela de relação
+                            }
+                        }
 
                         MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status;
                         MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code;
@@ -150,6 +171,12 @@ const inserirFilme = async (filme, contentType) => {
 
                         //Adiciona novamente o atributo genero com todas as informações do genero
                         filme.genrer = resulGenerosFilme.response.genrers;
+
+                        delete filme.director;
+
+                        let resultDiretoresFilme = await controllerFilmDirector.listDirectorsByIdFilm(lastIdFilm);
+
+                        filme.director = resultDiretoresFilme.response.directors
 
                         filmeInserido = {
                             "id": lastIdFilm,

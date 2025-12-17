@@ -169,11 +169,10 @@ const insertFilmGenrer = async (filmGenrer, contentType) => {
             //Chama a função que valida os dados
             let validarDadosGenrer = validarDados(filmGenrer);
             if (!validarDadosGenrer) {
-                console.log(filmGenrer)
 
                 //Chama a função do DAO que insere o gênero no DB
                 let result = await filmGenrerDAO.setInsertFilmGenrer(filmGenrer);
-                console.log(result)
+                
                 //Verifica se a função do DAO deu certo
                 if (result) {
                     //Chama a função do DAO que retorna o ID do último gênero do DB

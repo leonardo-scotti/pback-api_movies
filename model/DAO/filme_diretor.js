@@ -79,7 +79,7 @@ const getSelectLastId = async () => {
 const getSelectDirectorsByIdFilm = async (idFilm) => {
     try {
         //Script SQL
-        let sql = `select tbl_diretor.id_diretor, tbl_diretor.nome
+        let sql = `select tbl_diretor.*
                      from tbl_filme
                             join tbl_filme_diretor
                                 on tbl_filme.id = tbl_filme_diretor.filme_id
