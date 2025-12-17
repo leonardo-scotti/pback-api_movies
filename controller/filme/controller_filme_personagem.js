@@ -1,14 +1,14 @@
 /*******************************************************************************************
  * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL (Validações,
  *              tratamento de dados, tratamento de Erros, etc...).
- * Data: 12/11/2025
+ * Data: 17/12/2025
  * Autor: Leonardo Scotti
  * Versão: 1.0
  ******************************************************************************************/
 
 //Import do arquivo DAO para manipular o CRUD no DB
-//const filmeDirectorDAO = require('../../model/DAO/filme_diretor.js');
-const filmeDirectorDAO = require('../../model/DAO/filme_diretor.js');
+//const filmCharacterDAO = require('../../model/DAO/filme_diretor.js');
+const filmCharacterDAO = require('../../model/DAO/filme_personagem.js');
 
 const controllerFilmGenrer = require('./controller_filme_genero.js');
 
@@ -16,14 +16,14 @@ const controllerFilmGenrer = require('./controller_filme_genero.js');
 const MESSAGE_DEFAULT = require('../module/config_messages.js')
 
 // ==================== FUNÇÕES C.R.U.D ====================
-//Retorna uma lista de filmDirector
-const listFilmDirector = async () => {
+//Retorna uma lista de filmCharacter
+const listFilmCharacter = async () => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
         //Guada o resultado da função do DAO que lista os Gêneros
-        let result = await filmeDirectorDAO.getSelectAllFilmsDirectors();
+        let result = await filmCharacterDAO.getSelectAllFilmsCharacter();
 
         if (result) {
             if (result.length > 0) {
@@ -32,7 +32,7 @@ const listFilmDirector = async () => {
                 MESSAGE.HEADER.status                               = MESSAGE.SUCESS_REQUEST.status;
                 MESSAGE.HEADER.status_code                          = MESSAGE.SUCESS_REQUEST.status_code;
                 MESSAGE.HEADER.response.movies_directors_amount     = amount;
-                MESSAGE.HEADER.response.movies_directors            = result;
+                MESSAGE.HEADER.response.movies_character            = result;
 
                 return MESSAGE.HEADER; //200
             } else {
@@ -47,8 +47,8 @@ const listFilmDirector = async () => {
     }
 }
 
-//Retorna um filmeGênero filtrando pelo ID
-const searchFilmDirectorById = async (id) => {
+//Retorna um filmePersonagem filtrando pelo ID
+const searchFilmCharacterById = async (id) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -59,7 +59,7 @@ const searchFilmDirectorById = async (id) => {
             let idInt = parseInt(id);
 
             //Guarda o resultado da função do DAO que filtra um filmeDiretor por ID
-            let result = await filmeDirectorDAO.getSelectByIdFilmDirector(idInt);
+            let result = await filmCharacterDAO.getSelectByIdFilmCharacter(idInt);
 
             //Verifica se a função do DAO deu certo
             if(result) {
@@ -67,7 +67,7 @@ const searchFilmDirectorById = async (id) => {
                 if(result.length > 0) {
                     MESSAGE.HEADER.status                           = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code                      = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.movie_director          = result;
+                    MESSAGE.HEADER.response.movie_character         = result;
 
                     return MESSAGE.HEADER //200
                 } else {
@@ -85,8 +85,8 @@ const searchFilmDirectorById = async (id) => {
     }
 }
 
-//Retorna os diretores filtrando pelo ID do filme
-const listDirectorsByIdFilm = async (idFilm) => {
+//Retorna os personagens filtrando pelo ID do filme
+const listCharactersByIdFilm = async (idFilm) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -97,7 +97,7 @@ const listDirectorsByIdFilm = async (idFilm) => {
             let idInt = parseInt(idFilm);
 
             //Guarda o resultado da função do DAO que filtra os diretores pelo ID do filme
-            let result = await filmeDirectorDAO.getSelectDirectorsByIdFilm(idInt);
+            let result = await filmCharacterDAO.getSelectCharactersByIdFilm(idInt);
             
             //Verifica se a função do DAO deu certo
             if(result) {
@@ -105,7 +105,7 @@ const listDirectorsByIdFilm = async (idFilm) => {
                 if(result.length > 0) {
                     MESSAGE.HEADER.status                           = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code                      = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.directors               = result;
+                    MESSAGE.HEADER.response.characters              = result;
 
                     return MESSAGE.HEADER //200
                 } else {
@@ -124,18 +124,18 @@ const listDirectorsByIdFilm = async (idFilm) => {
 }
 
 //Retorna os filmes filtrando pelo ID do gênero
-const listFilmsByIdDirector = async (idDirector) => {
+const listFilmsByIdCharacter = async (idCharacter) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
         //Validação do campo obrigatório [ID]
-        if(idDirector > 0 && idDirector != '' && idDirector != null && idDirector != undefined) {
+        if(idCharacter > 0 && idCharacter != '' && idCharacter != null && idCharacter != undefined) {
             //Preserva o argumento e tranforma em INT
-            let idInt = parseInt(idDirector);
+            let idInt = parseInt(idCharacter);
     
             //Guarda o resultado da função do DAO que filtra os filmes filtrando pelo ID do diretor
-            let result = await filmeDirectorDAO.getSelectFilmsByIdDirector(idInt);
+            let result = await filmCharacterDAO.getSelectFilmsByIdCharacter(idInt);
             
             //Verifica se a função do DAO deu certo
             if(result) {
@@ -172,8 +172,8 @@ const listFilmsByIdDirector = async (idDirector) => {
     }
 }
 
-//Insere um filmeGenero no DB
-const insertFilmDirector = async (filmDirector, contentType) => {
+//Insere um filmePersonagem no DB
+const insertFilmCharacter = async (filmCharacter, contentType) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -181,28 +181,28 @@ const insertFilmDirector = async (filmDirector, contentType) => {
         //Verifica se o tipo de dado enviado é um JSON
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON') {
             //Chama a função que valida os dados
-            let validarDadosFilmDirector = validarDados(filmDirector);
-            if(!validarDadosFilmDirector) {
+            let validarDadosFilmCharacter = validarDados(filmCharacter);
+            if(!validarDadosFilmCharacter) {
                 //Chama a função do DAO que insere o gênero no DB
-                let result = await filmeDirectorDAO.setInsertFilmDirector(filmDirector);
+                let result = await filmCharacterDAO.setInsertFilmCharacter(filmCharacter);
                 
                 //Verifica se a função do DAO deu certo
                 if(result) {
                     //Chama a função do DAO que retorna o ID do último gênero do DB
-                    let lastIdFilmGenrer = await filmeDirectorDAO.getSelectLastId();
+                    let lastIdFilmGenrer = await filmCharacterDAO.getSelectLastId();
 
                     //Verifica se a função deu certo
                     if(lastIdFilmGenrer) {
                         //Cria o objeto do gênero inserido, com o ID no começo
                         let filmGenrerInserted = {
                             "id": lastIdFilmGenrer,
-                            ...filmDirector
+                            ...filmCharacter
                         }
 
                         MESSAGE.HEADER.status           = MESSAGE.SUCESS_CREATED_ITEM.status;
                         MESSAGE.HEADER.status_code      = MESSAGE.SUCESS_CREATED_ITEM.status_code;
                         MESSAGE.HEADER.message          = MESSAGE.SUCESS_CREATED_ITEM.message;
-                        MESSAGE.HEADER.response.movie   = filmGenrerInserted;
+                        MESSAGE.HEADER.response.movie_character   = filmGenrerInserted;
 
                         return MESSAGE.HEADER; //201
                     } else {
@@ -212,7 +212,7 @@ const insertFilmDirector = async (filmDirector, contentType) => {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
                 }
             } else {
-                return validarDadosFilmDirector;
+                return validarDadosFilmCharacter;
             }
 
         } else {
@@ -224,8 +224,8 @@ const insertFilmDirector = async (filmDirector, contentType) => {
     }
 }
 
-//Atualiza um filmeGenero no DB
-const updateFilmDirector = async (filmDirector, id, contentType) => {
+//Atualiza um filmePersonagem no DB
+const updateFilmCharacter = async (filmCharacter, id, contentType) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -233,21 +233,21 @@ const updateFilmDirector = async (filmDirector, id, contentType) => {
         //Verifica se o tipo de dado enviado é um JSON
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON') {
             //Chama a função que valida os dados
-            let validarDadosFilmGenrer = validarDados(filmDirector)
-            if(!validarDadosFilmGenrer) {
+            let validarDadosFilmCharacter = validarDados(filmCharacter)
+            if(!validarDadosFilmCharacter) {
                 //Chama a função para validar a consistência do ID e verificar se ele existe no DB
-                let validarID = await searchFilmDirectorById(id);
+                let validarID = await searchFilmCharacterById(id);
 
                 //Verifica se o ID existe no DB
                 if(validarID.status_code == 200) {
                     //Cria o objeto do gênero com o ID em primeiro
-                    let filmDirectorUpdated = {
+                    let filmCharacterUpdated = {
                         "id": parseInt(id),
-                        ...filmDirector
+                        ...filmCharacter
                     }
                     
                     //Chama a função do DAO que atualiza um gênero no DB
-                    let result = await filmeDirectorDAO.setUpdateFilmDirector(filmDirectorUpdated);
+                    let result = await filmCharacterDAO.setUpdateFilmGenrer(filmCharacterUpdated);
 
                     //Verifica se a função deu certo
                     if(result) {
@@ -264,7 +264,7 @@ const updateFilmDirector = async (filmDirector, id, contentType) => {
                     return validarID; //400 - 404 - 500
                 }
             } else {
-                return validarDadosFilmDirector;
+                return validarDadosFilmCharacter;
             }
 
         } else {
@@ -275,20 +275,20 @@ const updateFilmDirector = async (filmDirector, id, contentType) => {
     }
 }
 
-const deleteFilmDirector = async (id) => {
+const deleteFilmCharacter = async (id) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
         //Chama a função que busca um gênero por ID para verificar a consistência
-        let validarID = await searchFilmDirectorById(parseInt(id));
+        let validarID = await searchFilmCharacterById(parseInt(id));
 
         if(validarID.status_code == 200) {
             //Preserva o argumento e transforma em inteiro
-            let idFilmDirector = parseInt(id);
+            let idFilmCharacter = parseInt(id);
 
             //Chama a função do DAO que exclui um filmeDiretor do DB
-            let result = await filmeDirectorDAO.setDeleteFilmDirector(idFilmDirector);
+            let result = await filmCharacterDAO.setDeleteFilmCharacter(idFilmCharacter);
 
             //Verifica se a função deu certo
             if(result) {
@@ -310,16 +310,16 @@ const deleteFilmDirector = async (id) => {
 }
 
 // ==================== FUNÇÕES CONTROLLER ===================
-const validarDados = (filmDirector) => {
+const validarDados = (filmCharacter) => {
     //Cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
-    if(filmDirector.filme_id == '' || filmDirector.filme_id == null || filmDirector.filme_id == undefined || filmDirector.filme_id <= 0 || isNaN(filmDirector.filme_id)) {
+    if(filmCharacter.filme_id == '' || filmCharacter.filme_id == null || filmCharacter.filme_id == undefined || filmCharacter.filme_id <= 0 || isNaN(filmCharacter.filme_id)) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [FILME_ID] inválido!';
 
         return MESSAGE.ERROR_REQUIRED_FIELDS
-    } else if(filmDirector.diretor_id == '' || filmDirector.diretor_id == null || filmDirector.diretor_id == undefined || filmDirector.diretor_id <= 0 || isNaN(filmDirector.diretor_id)) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [DIRETOR_ID] inválido!';
+    } else if(filmCharacter.personagem_id == '' || filmCharacter.personagem_id == null || filmCharacter.personagem_id == undefined || filmCharacter.personagem_id <= 0 || isNaN(filmCharacter.personagem_id)) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [PERSONAGEM_ID] inválido!';
 
         return MESSAGE.ERROR_REQUIRED_FIELDS
     } else {
@@ -328,11 +328,11 @@ const validarDados = (filmDirector) => {
 }
 
 module.exports = {
-    listFilmDirector,
-    searchFilmDirectorById,
-    listDirectorsByIdFilm,
-    listFilmsByIdDirector,
-    insertFilmDirector,
-    updateFilmDirector,
-    deleteFilmDirector
+    listFilmCharacter,
+    searchFilmCharacterById,
+    listCharactersByIdFilm,
+    listFilmsByIdCharacter,
+    insertFilmCharacter,
+    updateFilmCharacter,
+    deleteFilmCharacter
 }

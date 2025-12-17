@@ -94,6 +94,20 @@ CREATE TABLE tbl_filme_diretor(
     ON DELETE CASCADE
 );
 
+CREATE TABLE tbl_filme_personagem(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    filme_id INT NOT NULL,
+    personagem_id INT NOT NULL,
+
+    CONSTRAINT FK_FILME_FILME_PERSONAGEM
+    FOREIGN KEY (filme_id) REFERENCES tbl_filme(id)
+    ON DELETE CASCADE,
+
+    CONSTRAINT FK_PERSONAGEM_FILME_PERSONAGEM
+    FOREIGN KEY (personagem_id) REFERENCES tbl_personagem(id_personagem)
+    ON DELETE CASCADE
+);
+
 -- ========== GÊNERO ==========
 CREATE TABLE tbl_genero(
 	id_genero INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -129,11 +143,10 @@ WHERE id = id;
 CREATE TABLE tbl_personagem(
 	id_personagem INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(100) NOT NULL,
-	data_nascimento DATE NOT NULL,
 	raca VARCHAR(50) NOT NULL,
 	descricao VARCHAR(500) NOT NULL,
     altura DECIMAL(10,2) NOT NULL,
-    peso DECIMAL(65,3) NOT NULL
+    peso DECIMAL(24,2) NOT NULL
 );
 
 INSERT INTO tbl_personagem(nome, data_nascimento, raca, descricao, altura, peso)

@@ -91,6 +91,12 @@ const insertCharacter = async (character, contentType) => {
                     //Chama a função do DAO que busca o último ID do DB
                     let lastIdCharacter = await characterDAO.getSelectLastIdCharacter();
 
+                    for(film of character.movie) {
+                        let filmCharacter = { filme_id: film.id, personagem_id: lastIdCharacter};
+
+                        // let resultCharacterFilm = await 
+                    }
+
                     //Cria um objeto do personagem com o ID sendo o primeiro atributo
                     let characterInserted = {
                         "id": lastIdCharacter,
@@ -196,10 +202,6 @@ const validarDados = (character) => {
 
     if (character.nome == '' || character.nome == null || character.nome == undefined) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!'
-
-        return MESSAGE.ERROR_REQUIRED_FIELDS;
-    } else if (character.data_nascimento == '' || character.data_nascimento == null || character.data_nascimento == undefined || character.data_nascimento.length < 10 || character.data_nascimento.length > 10) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [DATA_NASCIMENTO] inválido!'
 
         return MESSAGE.ERROR_REQUIRED_FIELDS;
     }else if (character.raca == '' || character.raca == null || character.raca == undefined) {
