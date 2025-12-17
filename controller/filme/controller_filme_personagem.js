@@ -105,7 +105,7 @@ const listCharactersByIdFilm = async (idFilm) => {
                 if(result.length > 0) {
                     MESSAGE.HEADER.status                           = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code                      = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.characters              = result;
+                    MESSAGE.HEADER.response.character              = result;
 
                     return MESSAGE.HEADER //200
                 } else {
@@ -154,7 +154,7 @@ const listFilmsByIdCharacter = async (idCharacter) => {
 
                     MESSAGE.HEADER.status           = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code      = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.movies  = result;
+                    MESSAGE.HEADER.response.movie  = result;
 
                     return MESSAGE.HEADER //200
                 } else {

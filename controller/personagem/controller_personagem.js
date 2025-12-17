@@ -9,6 +9,9 @@
 //Import do arquivo DAO para manipular o CRUD no DB
 const characterDAO = require('../../model/DAO/personagem.js');
 
+//Import da controller_filme_personagem
+const controllerFilmCharacter = require('../filme/controller_filme_personagem.js')
+
 //Import do arquivo que padroniza as mensagens
 const MESSAGE_DEFAULT = require('../module/config_messages.js')
 
@@ -87,6 +90,7 @@ const insertCharacter = async (character, contentType) => {
             if (!validarDadosCharacter) {
                 //Chama a função do DAO que insere um personagem no DB
                 let result = await characterDAO.setInsertCharacter(character);
+                
                 if (result) {
                     //Chama a função do DAO que busca o último ID do DB
                     let lastIdCharacter = await characterDAO.getSelectLastIdCharacter();
@@ -94,8 +98,22 @@ const insertCharacter = async (character, contentType) => {
                     for(film of character.movie) {
                         let filmCharacter = { filme_id: film.id, personagem_id: lastIdCharacter};
 
-                        // let resultCharacterFilm = await 
+                         let resultCharacterFilm = await controllerFilmCharacter.insertFilmCharacter(filmCharacter, contentType)
+                         if (resultCharacterFilm.status_code != 201) {
+                            return MESSAGE.ERROR_RELATION_TABLE; //200, porém com problemas na tabela de relação
+                        }
                     }
+
+                    
+
+                    MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status;
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code;
+                    MESSAGE.HEADER.message = MESSAGE.SUCESS_CREATED_ITEM.message;
+
+                    delete character.movie;
+
+                    let resultFilmCharacter = await controllerFilmCharacter.listFilmsByIdCharacter(lastIdCharacter);
+                    character.movie = resultFilmCharacter.response.movie
 
                     //Cria um objeto do personagem com o ID sendo o primeiro atributo
                     let characterInserted = {
@@ -103,9 +121,6 @@ const insertCharacter = async (character, contentType) => {
                         ...character
                     }
 
-                    MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status;
-                    MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code;
-                    MESSAGE.HEADER.message = MESSAGE.SUCESS_CREATED_ITEM.message;
                     MESSAGE.HEADER.response = characterInserted;
 
                     return MESSAGE.HEADER;
@@ -138,14 +153,19 @@ const updateCharacter = async (character, id, contentType) => {
                 console.log(validarID);
                 if (validarID.status_code == 200) {
                     //Cria o objeto do personagem com o ID em primeiro
-                    let characterUpdated = {
-                        "id": id,
-                        ...character
-                    }
+                    character.id = parseInt(id);
 
                     //Chama a função do DAO que atualiza o personagem no DB
-                    let result = await characterDAO.setUpdateCharacter(characterUpdated);
+                    let result = await characterDAO.setUpdateCharacter(character);
                     if (result) {
+                        for(film of character.movie) {
+                            let filmCharacter = { filme_id: film.id, personagem_id: lastIdCharacter};
+    
+                             let resultCharacterFilm = await controllerFilmCharacter.insertFilmCharacter(filmCharacter)
+                             if (resultCharacterFilm.status_code != 201) {
+                                return MESSAGE.ERROR_RELATION_TABLE; //200, porém com problemas na tabela de relação
+                            }
+                        }
 
                         MESSAGE.HEADER.status = MESSAGE.SUCESS_UPDATED_ITEM.status;
                         MESSAGE.HEADER.status_code = MESSAGE.SUCESS_UPDATED_ITEM.status_code;

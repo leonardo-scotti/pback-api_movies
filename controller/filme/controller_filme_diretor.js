@@ -105,7 +105,7 @@ const listDirectorsByIdFilm = async (idFilm) => {
                 if(result.length > 0) {
                     MESSAGE.HEADER.status                           = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code                      = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.directors               = result;
+                    MESSAGE.HEADER.response.director               = result;
 
                     return MESSAGE.HEADER //200
                 } else {

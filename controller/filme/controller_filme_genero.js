@@ -102,7 +102,7 @@ const listGenrersByIdFilm = async (idFilm) => {
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.genrers = result;
+                    MESSAGE.HEADER.response.genrer = result;
 
                     return MESSAGE.HEADER //200
                 } else {

@@ -107,6 +107,7 @@ const searchDirectorById = async (id) => {
             return MESSAGE.ERROR_REQUIRED_FIELDS; //400
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };

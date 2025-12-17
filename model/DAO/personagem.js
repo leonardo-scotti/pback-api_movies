@@ -76,10 +76,9 @@ const getSelectLastIdCharacter = async () => {
 //Insere um personagem no DB
 const setInsertCharacter = async (character) => {
     try {
-        let sql = `INSERT INTO tbl_personagem(nome, data_nascimento, raca, descricao, altura, peso)
+        let sql = `INSERT INTO tbl_personagem(nome, raca, descricao, altura, peso)
                     VALUES (
                         '${character.nome}',
-                        '${character.data_nascimento}',
                         '${character.raca}',
                         '${character.descricao}',
                         ${character.altura},

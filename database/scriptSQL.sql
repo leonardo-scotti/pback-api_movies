@@ -175,7 +175,10 @@ CREATE TABLE tbl_diretor(
 	data_nascimento DATE NOT NULL,
 	altura DECIMAL(4,2) NULL,
 	peso DECIMAL(6,3) NULL,
-	patrimonio_liquido DECIMAL(14,2) NULL
+	patrimonio_liquido DECIMAL(14,2) NULL,
+    id_sexo INT NOT NULL,
+
+    FOREIGN KEY (id_sexo) REFERENCES tbl_sexo(id_sexo)
 );
 
 INSERT INTO tbl_diretor(nome, data_nascimento, altura, peso, patrimonio_liquido)
@@ -196,6 +199,12 @@ UPDATE tbl_diretor SET
     patrimonio_liquido  =   'patrimonio_lilquido'
 WHERE id = id;
 
+-- ========== SEXO ==========
+CREATE TABLE tbl_sexo(
+    id_sexo INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    sexo VARCHAR(20) NOT NULL
+);
+
 -- ==================== TRIGGERS ======================
 DELIMITER $$
 CREATE TRIGGER trg_quebrar_constraint_filme_delete
@@ -213,5 +222,31 @@ FOR EACH ROW
 BEGIN
     DELETE FROM tbl_filme_genero WHERE filme_id = OLD.id;
 END$$
+DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER trg_atualizar_filme_personagem_update
+BEFORE UPDATE ON tbl_personagem
+FOR EACH ROW
+BEGIN
+    DELETE FROM tbl_filme_personagem WHERE personagem_id = OLD.id_personagem;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_quebrar_constraint_personagem_delete
+BEFORE DELETE ON tbl_personagem
+FOR EACH ROW
+BEGIN
+    DELETE FROM tbl_filme_personagem WHERE personagem_id = OLD.id_personagem;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_quebrar_constraint_diretor_delete
+BEFORE DELETE ON tbl_diretor
+FOR EACH ROW
+BEGIN
+    DELETE FROM tbl_filme_diretor WHERE diretor_id = OLD.id_diretor;
+END$$
 DELIMITER ;
